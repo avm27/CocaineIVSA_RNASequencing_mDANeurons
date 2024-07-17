@@ -92,7 +92,7 @@ Tate A. Pollock1,2, Alexander V. Margetts1-3, Samara J. Vilca1-2 & Luis M. Tuest
 </center>
 
 
-<font size="20"> **Abstract** </font>
+<font size="16"> **Abstract** </font>
 
 Dopamine (DA) signaling plays an essential role in reward valence attribution and in encoding the reinforcing properties of natural and  artificial rewards. The adaptive responses from midbrain dopamine neurons to artificial rewards such as drugs of abuse are therefore important for understanding the development of substance use disorders. Drug-induced changes in gene expression are one such adaptation that can determine the activity of dopamine signaling in projection regions of the brain reward system. One of the major challenges to obtaining this understanding is the inherent cellular heterogeneity in the brain, where each neuron population can be defined by a distinct transcriptional profile. To bridge this gap, we have adapted a virus-based method for labeling and capture of dopamine nuclei, coupled with nuclear RNA-sequencing and bioinformatics analyses, to study the transcriptional adaptations, specifically, of dopamine neurons in the ventral tegmental area (VTA) during cocaine taking and cocaine craving using a mouse model of cocaine intravenous self-administration (IVSA). Our results show significant changes in gene expression across non-drug operant training, cocaine taking, and cocaine craving, highlighted by an enrichment in expression of repressive epigenetic modifying enzymes during cocaine craving. Immunohistochemical validation further revealed an increase of H3K9me3 deposition in DA neurons during cocaine craving. These results demonstrate that cocaine-induced transcriptional adaptations in dopamine neurons vary by phase of self-administration and suggest that such an approach may be useful in identifying relevant phase-specific molecular targets to alter the behavioral course of substance use disorders.
 
@@ -100,7 +100,7 @@ Dopamine (DA) signaling plays an essential role in reward valence attribution an
 ![](assets/graphical-abstract.png)
 
 
-<font size="20"> **Differential Gene Expression Analysis with DESeq2** </font>
+<font size="16"> **Differential Gene Expression Analysis with DESeq2** </font>
 
 ## Setup
 

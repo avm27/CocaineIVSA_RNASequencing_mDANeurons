@@ -1,0 +1,670 @@
+---
+title: "Home"
+site: workflowr::wflow_site
+output:
+  html_document:
+    toc: no
+    df_print: paged
+  workflowr::wflow_html:
+    toc: no
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(gprofiler2)
+library(DESeq2)
+library(ggplot2)
+library(clusterProfiler)
+library(biomaRt)
+library(ReactomePA)
+library(DOSE)
+options(connectionObserver = NULL)
+library(org.Mm.eg.db)
+library(tximport)
+library(ggsci)
+library(pheatmap)
+library(genefilter)
+library(RColorBrewer)
+library(GO.db)
+library(topGO)
+library(dplyr)
+library(gage)
+library(pathview)
+library(WGCNA)
+library(tidyr)
+library(enrichplot)
+library(ggnewscale)
+library(SPIA)
+library(ggpubr)
+library(apeglm)
+library(GOSemSim)
+library(edgeR)
+library(tweeDEseqCountData)
+library(statmod)
+library(org.Mm.eg.db)
+library(tidyverse)
+library(pheatmap)
+library(gplots)
+library(Mus.musculus)
+library(Glimma)
+library(RColorBrewer)
+library(clusterProfiler)
+library(ReactomePA)
+library(enrichplot)
+library(ggnewscale)
+library(knitr)
+library(tables)
+library(vidger)
+library(kableExtra)
+library(regionReport)
+library(dplyr)
+library(tidyr)
+library(VennDiagram)
+library(conflicted)
+library("BiocParallel")
+register(MulticoreParam(12))
+```
+
+
+<font size="16"> **Purification of a midbrain dopaminergic population** </font>
+
+
+# DESeq2 Analysis -- Dopamine vs nonDopamine
+
+Building DESeq2 input files from gene count matrices output by StringTie.
+
+```{r DESeq2 Build, message=FALSE, warning=FALSE, include=FALSE}
+rm(list = ls(all.names = TRUE))
+gc()
+conflicts_prefer(base::setdiff)
+setwd("/home/avm27/Documents/Raw_Sequencing_Data/CIVSA2/CocaineIVSA_RNASequencing_mDANeurons")
+
+## Run DEeq2 from Matrix output using Stringtie to compare all groups
+
+colData <- read.csv("data/sample_info_CIVSA_DAvsnDA.csv", sep = ",", row.names = 1)
+countData <-as.matrix(read.csv("data/gene_count_matrix_CIVSA.csv", row.names = "gene_id"))
+
+
+colnames(countData)
+rownames(colData)
+all(rownames(colData) %in% colnames(countData))
+
+
+countData <- countData[, rownames(colData)]
+all(rownames(colData) == colnames(countData))
+#head(countData)
+
+```
+
+Running DeSeq2 analysis with factor level of Dopamine vs Non-Dopamine
+
+```{r DESeq2 Analysis, echo=FALSE, message=FALSE, warning=FALSE}
+
+dds <- DESeqDataSetFromMatrix(countData = countData, colData = colData, design = ~condition)
+
+## Relevel Condition to Analyze Each group against Another
+dds$condition <- relevel(dds$condition, ref = "nDA")
+dds <- DESeq(dds)
+
+```
+
+# Plot Estimates and Gather Results
+
+## Gather Results {.tabset}
+
+These results include overview for each result file and dispersion estimates based on count values.
+
+### Dopamine vs nonDopamine
+```{r Craving vs FoodTrained Results, echo=FALSE, results='asis'}
+## Look at Results
+res <- results(dds, name = "condition_DA_vs_nDA")
+
+kable(head(res, 20), caption = "DA vs nDA Results Overview", format = "html", align = "l", booktabs=TRUE) %>%
+  kable_styling(html_font = "Arial", font_size = 10, bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  scroll_box(width = "1000px", height = "500px")
+
+summary(res)
+```
+## Annotate Results Files and Pull Significant DEGs {.tabset}
+
+This subsection is for annotation the results files to include all necessary information for downstream analyses.
+
+```{r Annotate DDS Matrices, message=FALSE, warning=FALSE, include=FALSE, results='asis'}
+## Make new rownames file and split based on pipe from dds file
+deseqrownames <- data.frame(rownames(dds))
+newrownames <- deseqrownames %>% separate(rownames.dds., c("id", "symbol"),sep ="([|])")
+
+all(newrownames$id == newrownames$symbol)
+sum(is.na(newrownames$symbol))
+sum(duplicated(newrownames$symbol))
+
+mcols(dds) <- cbind(mcols(dds), newrownames)
+# Add gene symbol to results
+res$symbol <- mcols(dds)$symbol
+
+## Add Annotations
+
+res$description <- mapIds(
+  x = org.Mm.eg.db,
+  keys = res$symbol,
+  column = "GENENAME",
+  keytype = "SYMBOL",
+  multiVals = "first"
+)
+
+# Add ENTREZ ID
+res$entrez <- mapIds(
+  x = org.Mm.eg.db,
+  keys = res$symbol,
+  column = "ENTREZID",
+  keytype = "SYMBOL",
+  multiVals = "first"
+)
+
+# Add ENSEMBL ID
+res$ensembl <- mapIds(
+  x = org.Mm.eg.db,
+  keys = res$entrez,
+  column = "ENSEMBL",
+  keytype = "ENTREZID",
+  multiVals = "first"
+)
+
+```
+
+After annotation I subset the results to only view the significantly differentially expressed genes with an adjusted p-value \> 0.05.
+
+```{r Subset Significant Results, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
+## Subset for significant genes only
+results_sig <- subset(res, padj < 0.05)
+```
+
+### DA vs nDA
+
+```{r DA vs nDA Significant Results, echo=FALSE, results='asis'}
+kable((head(results_sig, 20)), caption = "Significant DEGs DA vs nDA", format = "html", align = "l", booktabs = TRUE) %>%
+  kable_styling(html_font = "Arial", font_size = 10, bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  scroll_box(width = "1000px", height = "500px")
+```
+
+```{r Write Significant Results to CSV, eval=FALSE, include=FALSE}
+write_csv((as.data.frame(results_sig)), "output/Sig_Res_DA_vs_nDA.csv")
+```
+
+## Visualize Shrinkage Estimations
+
+
+
+Following subsetting, I want to see how the data looks based on effect size so I have run a shrinkage model using the "apeglm" method which normalizes counts based on effect size without major changes to data structure. I have included non-shrunk models as well for comparison.
+
+```{r Shrinkage Estimation, echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+## Log Fold Change Shrinkage Estimation
+resLFC <- lfcShrink(dds, coef = "condition_DA_vs_nDA", type = "apeglm")
+```
+
+### Non-Shrunken L2FC {.tabset}
+
+#### DA vs nDA
+
+```{r Non-Shrunken Estimate Plots, echo=FALSE, message=FALSE, warning=FALSE}
+DESeq2::plotMA(res, ylim = c(-5, 5), alpha = 0.05, main = "Non-Shrunken L2FC DA vs nDA")
+```
+
+### Shrunken L2FC {.tabset}
+
+#### DA vs nDA
+
+```{r Shrunken Estimate Plots, echo=FALSE, message=FALSE, warning=FALSE}
+DESeq2::plotMA(resLFC, alpha = 0.05, main = "Shrunken LF2C DA vs nDA")
+```
+
+
+
+# Looking at Differentially Expressed Genes
+
+We can generate a matrix to identify where our differentially expressed genes lie between each group based on an alpha value of 0.05. 
+
+```{r Matrix of Differentially Expressed genes across groups, echo=TRUE, message=FALSE, warning=FALSE}
+## Matrix Visualizaattion
+x <- vsDEGMatrix(
+  data = dds, padj = 0.05, d.factor = "condition",
+  type = "deseq", title = TRUE, legend = TRUE, grid = TRUE
+)
+```
+
+```{r Writing matrix to PDF File, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+pdf("plots/DAvsnDA_DEG_Matrix.pdf")
+x
+dev.off()
+```
+
+```{r Writing matrix to CSV File, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+## Write table to csv files
+df_scatter <- x$data
+
+write.table(
+  x = as.data.frame(df_scatter),
+  file = "results/DEGs_Flower_Matrix_DAvsnDA_Experiment_05.txt",
+  sep = "\t",
+  quote = F,
+  col.names = NA
+)
+```
+
+```{r Save All Counts and Results Files, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+## Write table to csv files
+write.table(
+  x = as.data.frame(counts(dds), normalized = T),
+  file = "data/DAvsnDA_normalized_counts_DESeq2.txt",
+  sep = "\t",
+  quote = F,
+  col.names = NA
+)
+
+
+# Write significant normalized gene counts to a .txt file
+write.table(
+  x = counts(dds[rownames(results_sig)], normalized = T),
+  file = "results/normcounts/Sig_Norm_Counts_DA_vs_nDA.txt",
+  sep = "\t",
+  quote = F,
+  col.names = NA
+)
+```
+
+# Data Visualization
+
+## Normalized Counts and Plots of Genes of Interest {.tabset}
+
+```{r Plot Counts -- Selected 1, echo=TRUE, message=FALSE, warning=FALSE}
+level_order <- c("DA", "nDA") # this vector might be useful for other plots/analyses
+
+normalized_counts <- counts(dds, normalized = TRUE)
+```
+
+### Th
+
+```{r Selected Genes, echo=TRUE, message=FALSE, warning=FALSE}
+#### Th
+
+d2 <- plotCounts(dds,
+  gene = "Th|Th", intgroup = "condition",
+  returnData = TRUE
+)
+
+a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
+  geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
+  scale_color_manual(values=c("#00DAE0", "#FF9289")) +
+  theme_bw() +
+  xlab("Condition")+
+  ylab("Normalized Counts")+
+  ggtitle(
+    label = "Th Expression",
+    subtitle = "Normalized Gene Expression"
+  )
+
+a
+```
+
+### En1 
+
+```{r Selected Genes2, echo=TRUE, message=FALSE, warning=FALSE}
+#### En1
+
+
+d2 <- plotCounts(dds,
+  gene = "En1|En1", intgroup = "condition",
+  returnData = TRUE
+)
+
+a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
+  geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
+  scale_color_manual(values=c("#00DAE0", "#FF9289")) +
+  theme_bw() +
+  xlab("Condition")+
+  ylab("Normalized Counts")+
+  ggtitle(
+    label = "En1 Expression",
+    subtitle = "Normalized Gene Expression"
+  )
+
+a
+```
+
+### Slc6a3
+
+```{r Selected Genes3, echo=TRUE, message=FALSE, warning=FALSE}
+#### Slc6a3
+
+
+d2 <- plotCounts(dds,
+  gene = "Slc6a3|Slc6a3", intgroup = "condition",
+  returnData = TRUE
+)
+
+a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
+  geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
+  scale_color_manual(values=c("#00DAE0", "#FF9289")) +
+  theme_bw() +
+  xlab("Condition")+
+  ylab("Normalized Counts")+
+  ggtitle(
+    label = "Slc6a3 Expression",
+    subtitle = "Normalized Gene Expression"
+  )
+
+a
+```
+
+### Neat1
+
+```{r Selected Genes4, echo=TRUE, message=FALSE, warning=FALSE}
+#### Ehmt2
+
+d2 <- plotCounts(dds,
+  gene = "Neat1|Neat1", intgroup = "condition",
+  returnData = TRUE
+)
+
+a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
+  geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
+  scale_color_manual(values=c("#00DAE0", "#FF9289")) +
+  theme_bw() +
+  xlab("Condition")+
+  ylab("Normalized Counts")+
+  ggtitle(
+    label = "Neat1 Expression",
+    subtitle = "Normalized Gene Expression"
+  )
+
+a
+```
+
+### Mag
+
+```{r Selected Genes5, echo=TRUE, message=FALSE, warning=FALSE}
+#### Mag
+
+d2 <- plotCounts(dds,
+  gene = "Mag|Mag", intgroup = "condition",
+  returnData = TRUE
+)
+
+a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
+  geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
+  scale_color_manual(values=c("#00DAE0", "#FF9289")) +
+  theme_bw() +
+  xlab("Condition")+
+  ylab("Normalized Counts")+
+  ggtitle(
+    label = "Mag Expression",
+    subtitle = "Normalized Gene Expression"
+  )
+
+a
+```
+
+
+## Principal Components Analysis (PCA)
+
+For visualization I am converting all analyses to logarithmic. Following this I have completed a PCA.
+
+```{r Plot PCA, echo=FALSE, paged.print=TRUE}
+
+# Convert all samples to rlog for data visualization
+
+ddsMat_rlog <- DESeq2::rlog(dds, blind = FALSE)
+
+nudge <- position_nudge(y =2)
+
+# Plot PCA by column variable (dds)
+
+#pdf(file = "plots/PCA_Updated_DAvsnDA.pdf", width = 6, height = 6);
+
+pcaData2 <- plotPCA(ddsMat_rlog, intgroup = "condition", returnData = TRUE)
+pcaData2$condition <- factor(pcaData2$condition, levels = c("DA", "nDA"))
+percentVar2 <- round(100 * attr(pcaData2, "percentVar"))
+ggplot(pcaData2, aes(PC1, PC2, color=condition, label = colnames(dds))) +
+  theme_bw() + # remove default ggplot2 theme
+  geom_point(size = 2) + # Increase point size
+  #scale_y_continuous(limits = c(-60, 60)) +# change limits to fix figure dimensions
+  #scale_x_continuous(limits = c(-80, 50)) +# change limits to fix figure dimensions
+  xlab(paste0("PC1: ",percentVar2[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar2[2],"% variance")) + 
+  ggrepel::geom_label_repel(box.padding = 1, max.overlaps = Inf) +
+  scale_fill_manual(values=c("#00DAE0", "#FF9289")) +
+  coord_fixed() +
+  ggtitle(label = "Principal Component Analysis (PCA)", 
+          subtitle = "rlog transformed") 
+
+#dev.off()
+
+```
+
+```{r Filter Heatmaps by DEGs, fig.height=8, fig.width=8, message=FALSE, warning=FALSE}
+
+ressig1 <- as.data.frame(results_sig)
+
+ressig1$Comparison <- "DA vs nDA"
+
+ressig1_highlfc_pos <- ressig1[ressig1$log2FoldChange >= 1.5,]
+ressig1_highlfc_neg <- ressig1[ressig1$log2FoldChange <= -1.5,]
+
+temp_sigdegshm <- rbind(ressig1_highlfc_pos, ressig1_highlfc_neg)
+
+temp_sigdegshm6 <- temp_sigdegshm[temp_sigdegshm$lfcSE <=1,]
+
+temp_sigdegshm6 <- temp_sigdegshm6[order(temp_sigdegshm6$log2FoldChange),]
+
+#sum(is.na(temp_sigdegshm6$symbol))
+#sum(duplicated(temp_sigdegshm6$symbol))
+
+dup_rows <- duplicated(temp_sigdegshm6$symbol)
+data_dedup <- temp_sigdegshm6[!dup_rows, ]
+
+rows <- rownames(data_dedup)
+
+select <- order(rowMeans(counts(dds,normalized=TRUE)),
+                decreasing=TRUE)#[1:1500]
+
+mat <- assay(ddsMat_rlog)[select,]
+
+data_mod <- mat[rownames(mat) %in% rows, ] 
+
+matrownames_data_mod <- data.frame(rownames(data_mod))
+
+matrownames_data_mod <- matrownames_data_mod %>% separate(rownames.data_mod., c("id", "symbol"),sep ="([|])")
+
+select2 <- order(rowMeans(counts(dds,normalized=TRUE)),
+                decreasing=TRUE)
+
+mat2 <- assay(ddsMat_rlog)[select2,]
+
+data_mod2 <- mat2[rownames(mat2) %in% rows, ] 
+
+data_mod3 <- head(data_mod2, 75)
+
+matrownames_data_mod3 <- data.frame(rownames(data_mod3))
+
+matrownames_data_mod3 <- matrownames_data_mod3 %>% separate(rownames.data_mod3., c("id", "symbol"),sep ="([|])")
+
+
+samples <- as.tibble(read.csv("data/sample_info_CIVSA_DAvsnDA.csv", sep = ","))
+
+annot_col <- samples %>%
+  column_to_rownames('samplename') %>%
+  as.data.frame()
+
+ann_colors = list(
+  condition = c(nDA = "#FF9289", DA = "#00DAE0"))
+
+```
+
+
+### Unsupervised Clustering
+
+```{r Filter Heatmaps by DEGs2 Unsupervised, fig.height=8, fig.width=8, message=FALSE, warning=FALSE}
+pheatmap::pheatmap(
+  mat = data_mod,
+  color = colorRampPalette(rev(brewer.pal(11, "RdYlBu")))(155),
+  scale = "row",
+  annotation_col = annot_col,
+  annotation_colors = ann_colors,
+  fontsize =10,
+  show_colnames = F,
+  cluster_rows = T,
+  cluster_cols = T,
+  annotation_legend = T,
+  legend = T,
+  show_rownames = F,
+  clustering_distance_rows = "correlation",
+  clustering_method = "ward.D",
+  main = "Heatmap of Significant DEGs -- Unsupervised Clustering",
+  cluster_row_slices = TRUE,
+  show_row_dend = FALSE,
+  cutree_rows = 4,
+  cutree_cols = 2,
+  treeheight_row = 10,
+  treeheight_col = 10,
+  filename = "plots/DAvsnDA_HeatmapDEGs.pdf",
+  legend_labels = c("Da", "nDA")
+)
+```
+
+### Specified Genes 
+
+```{r Filter Heatmaps by DEGs2, fig.height=8, fig.width=8, message=FALSE, warning=FALSE}
+pheatmap::pheatmap(
+  mat = data_mod3,
+  color = colorRampPalette(rev(brewer.pal(11, "RdYlBu")))(155),
+  scale = "row", 
+  annotation_col = annot_col,
+  annotation_colors = ann_colors,
+  fontsize = 6, 
+  show_colnames = T,
+  cluster_rows = T,
+  cluster_cols = T,
+  annotation_legend = T,
+  legend = T,
+  show_rownames = T,
+  clustering_distance_rows = "correlation",
+  clustering_method = "ward.D",
+  main = "Heatmap of Significant DEGs -- Supervised Clustering",
+  cluster_row_slices = TRUE,
+  show_row_dend = FALSE,
+  cutree_rows = 4,
+  cutree_cols = 3,
+  gaps_col = c(4, 7),
+  treeheight_row = 10,
+  treeheight_col = 10,
+  #filename = "plots/DAvsnDA_HeatmapDEGs_withLabs.pdf",
+  legend_labels = c("DA", "nDA"),
+  labels_row = matrownames_data_mod3$symbol
+)
+
+```
+
+## Volcano Plots
+
+### Visualize Results: Volcano Plots (Non-Interactive)
+
+Volcano plots are generated by gathering the FDR corrected p-values from each analysis. The adjusted p-values undergo a -log10 transformation to generate these FDR corrected values. Any rows containing "NA" are ommitted from analysis. Data points are colored based on increasing or decreasing value and plotted using ggplot2. Adjusted p-value cutoff is 1.3 following log transformation.(-log10 0.05 = 1.3)
+
+```{r Volcano Plots, echo=FALSE, fig.height=10, fig.width=10, paged.print=TRUE}
+
+# Gather Log-fold change and FDR-corrected pvalues from DESeq2 results
+# Change pvalues to -log10 (1.3 = 0.05)
+data <- data.frame(gene = (res$symbol),
+                   pval = -log10(res$padj), 
+                   lfc = res$log2FoldChange,
+                   lfcSE = res$lfcSE)
+
+
+
+data <- subset(data, lfcSE <= 3)
+
+
+# Remove any rows that have NA as an entry
+data <- na.omit(data)
+
+# Color the points which are up or down
+## If fold-change > 0 and pvalue > 1.3 (Increased significant)
+## If fold-change < 0 and pvalue > 1.3 (Decreased significant)
+
+
+library(dplyr)
+data <- dplyr::mutate(data, color = case_when(data$lfc > 0 & data$pval > 1.3 ~ "Increased in DA vs nDA",
+                                       data$lfc < 0 & data$pval > 1.3 ~ "Decreased in DA vs nDA",
+                                       data$pval < 1.3 ~ "Nonsignificant"))
+
+
+data$genelabels <- ifelse(data$gene == "Th"
+                                  | data$gene == "Slc18a2"
+                                  | data$gene == "Slc6a3"
+                                  | data$gene == "En1"
+                                  | data$gene == "Drd2"
+                                  | data$gene == "Neat1"
+                                  | data$gene == "Slc1a3"
+                                  | data$gene == "Slc18a1"
+                                  | data$gene == "Mag"
+                                  | data$gene == "Dbh"
+                                  | data$gene == "Chrna6", T, F)
+
+
+
+
+# Make a basic ggplot2 object with x-y values
+vol <- ggplot(data, aes(x = lfc, y = pval, color = color))
+
+
+# Add ggplot2 layers
+
+y.axis.text <- element_text(face = "bold", color = "black", size = 10)
+x.axis.text <- element_text( face = "bold", color = "black", size = 10)
+plot.title.text <- element_text( face = "bold", color = "black", size = 11, hjust = 0.5)
+legend.text <- element_text(face = "bold", color = "black", size = 10)
+legend.title.text <- element_text(face = "bold", color = "black", size = 10)
+axis.title <- element_text(face = "bold", color = "black", size = 10)
+
+
+library(ggrepel)
+
+vol_final <- vol +   
+  ggtitle(label = "DA vs nDA") +
+  geom_point(size = 1, alpha = 0.8, na.rm = T) +
+  scale_color_manual(name = "Directionality",
+                     values = c("Increased in DA vs nDA" = "#008B00", "Decreased in DA vs nDA" = "#CD4F39", "Nonsignificant" = "darkgray")) +
+  theme_bw(base_size = 14) + # change overall theme+
+  theme(legend.position = "right",
+        axis.text.y = y.axis.text, 
+        axis.text.x = x.axis.text,
+        axis.title = axis.title,
+        plot.title = plot.title.text,
+        legend.text = legend.text,
+        legend.title = legend.title.text,
+        legend.key.size = unit(0.5, 'cm'), #change legend key size
+        legend.key.height = unit(0.5, 'cm'), #change legend key height
+        legend.key.width = unit(0.5, 'cm'))+  #change legend key width
+  xlab(expression(log[2]("Fold Change"))) + # Change X-Axis label
+  ylab(expression(-log[10]("adjusted p-value"))) + # Change Y-Axis label
+  geom_hline(yintercept = 1.3, colour = "darkgrey") + # Add p-adj value cutoff line
+  scale_y_continuous(trans = "log1p")+
+  geom_text_repel(aes(lfc,pval),
+                      label = ifelse(data$genelabels == TRUE, 
+                                     as.character(data$gene),""), 
+                      box.padding = unit(1, "lines"),hjust= 0.30, max.overlaps = Inf)  # Scale y-axis due to large p-values+
+
+
+#pdf(file = "plots/Volcano_Updated_DAvsnDA.pdf", width = 10, height = 10);
+
+#bottom_row<-ggarrange(vol2_final,vol3_final,ncol=2,nrow=1)
+
+ggarrange(vol_final)
+
+#ggarrange(vol2_final)
+
+#dev.off()
+```
