@@ -31,6 +31,8 @@
        pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
 
@@ -55,6 +57,116 @@ div.section {
 
 
 
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+.sourceCode .row {
+  width: 100%;
+}
+.sourceCode {
+  overflow-x: auto;
+}
+.code-folding-btn {
+  margin-right: -30px;
+}
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -289,7 +401,7 @@ $(document).ready(function () {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -300,8 +412,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -310,13 +422,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-07-16
+<strong>Last updated:</strong> 2024-07-17
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong>
@@ -358,13 +470,123 @@ results.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong8ddc6e9">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 8ddc6e9
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20240716code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20240716)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20240716code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20240716)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongabsolute">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>File paths:</strong> absolute </a>
+</p>
+</div>
+<div id="strongFilepathsstrongabsolute" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Using absolute paths to the files within your workflowr project makes it
+difficult for you and others to run your code on a different machine.
+Change the absolute path(s) below to the suggested relative path(s) to
+make your code more reproducible.
+</p>
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th style="text-align:left;">
+absolute
+</th>
+<th style="text-align:left;">
+relative
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+/home/avm27/Documents/Raw_Sequencing_Data/CIVSA2/CocaineIVSA_RNASequencing_mDANeurons
+</td>
+<td style="text-align:left;">
+.
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong65a97a6">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong> 65a97a6
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong8ddc6e9"
+<div id="strongRepositoryversionstrong65a97a6"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -373,7 +595,7 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 8ddc6e9.
+The results in this page were generated with repository version 65a97a6.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -389,6 +611,16 @@ were generated:
 <pre><code>
 Ignored files:
     Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  data/CIVSA_normalized_counts_DESeq2.txt
+    Untracked:  data/gene_count_matrix_CIVSA.csv
+    Untracked:  data/sample_info_CIVSA.csv
+    Untracked:  output/Sig_Res_Craving_vs_FoodTrained.csv
+    Untracked:  output/Sig_Res_Craving_vs_Maintenance.csv
+    Untracked:  output/Sig_Res_Maintenance_vs_FoodTrained.csv
+    Untracked:  plots/
+    Untracked:  results/
 
 Unstaged changes:
     Modified:   analysis/_site.yml
@@ -441,6 +673,40 @@ Message
 Rmd
 </td>
 <td>
+65a97a6
+</td>
+<td>
+avm27
+</td>
+<td>
+2024-07-17
+</td>
+<td>
+Testing
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+e58ce5e
+</td>
+<td>
+avm27
+</td>
+<td>
+2024-07-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 ad8ae96
 </td>
 <td>
@@ -460,7 +726,4485 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<p>Welcome to my research website.</p>
+<center>
+<p><font size="18"> <strong>Microglia contribute to methamphetamine
+reinforcement and reflect persistent transcriptional and morphological
+adaptations to the drug</strong> </font></p>
+</center>
+<center>
+<p>Samara J. Vilca1,2†, Alexander V. Margetts1-3†, Isabella Fleites1-3,
+Claes R. Wahlestedt1-3 &amp; Luis M. Tuesta1-3*</p>
+</center>
+<center>
+<p>1 Department of Psychiatry &amp; Behavioral Sciences 2 Center for
+Therapeutic Innovation 3 Sylvester Comprehensive Cancer Center
+University of Miami Miller School of Medicine, Miami, FL 33136 † Denotes
+equal contribution * Corresponding author (<a
+href="mailto:ltuesta@miami.edu" class="email">ltuesta@miami.edu</a>)</p>
+</center>
+<div id="abstract" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Abstract</h1>
+<p>Abstract Methamphetamine use disorder (MUD) is a chronic, relapsing
+disease that is characterized by repeated drug use despite negative
+consequences for which there are currently no FDA approved cessation
+therapeutics. Repeated methamphetamine (METH) use induces long-term gene
+expression changes in brain regions associated with reward processing
+and drug-seeking behavior, and recent evidence suggests that
+methamphetamine-induced neuroinflammation may also shape behavioral and
+molecular responses to the drug. Microglia, the resident immune cells in
+the brain, are principal drivers of neuroinflammatory responses and
+contribute to the pathophysiology of substance use disorders. Here, we
+investigated transcriptional and morphological changes in striatal
+microglia in response to methamphetamine-taking and during
+methamphetamine abstinence, as well as their functional contribution to
+drug-taking behavior. We show that methamphetamine self-administration
+induces transcriptional changes related to protein folding, mRNA
+processing, immune signaling, and neurotransmission in striatal
+microglia. Importantly, many of these transcriptional changes persist
+through abstinence, a finding supported by morphological analysis.
+Functionally, we report that microglial ablation increases
+methamphetamine-taking, possibly involving neuroimmune and
+neurotransmitter regulation. In contrast, microglial depletion did not
+alter methamphetamine-seeking behavior following 21 days of abstinence,
+highlighting the complexity of drug-seeking behaviors. Taken together,
+these results suggest that methamphetamine induces both short and
+long-term changes in striatal microglia that contribute to altered
+drug-taking behavior and may be leveraged for preclinical development of
+methamphetamine cessation therapeutics.</p>
+</div>
+<div id="deseq2-analysis" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> DESeq2 Analysis</h1>
+<div id="setup" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Setup</h2>
+<p>Building DESeq2 input files from gene count matrices output by
+StringTie following removal of samples that are outliers.</p>
+<p>Running DeSeq2 analysis with factor levels of FoodTrained vs
+Maintenance, Craving vs Maintenance and Craving vs Foodtrained</p>
+</div>
+</div>
+<div id="plot-estimates-and-gather-results" class="section level1"
+number="3">
+<h1><span class="header-section-number">3</span> Plot Estimates and
+Gather Results</h1>
+<div id="gather-results" class="section level2 tabset" number="3.1">
+<h2 class="tabset"><span class="header-section-number">3.1</span> Gather
+Results</h2>
+<p>These results include overview for each result file and dispersion
+estimates based on count values.</p>
+<div id="craving-vs-foodtraining" class="section level3" number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> Craving vs
+FoodTraining</h3>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:500px; overflow-x: scroll; width:1000px; ">
+<table class="table table-striped table-hover table-condensed table-responsive" style="font-size: 10px; font-family: Arial; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+Craving vs FoodTrained CIVSA Results Overview
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+baseMean
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+log2FoldChange
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+lfcSE
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+stat
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+pvalue
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+padj
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Mrpl15|Mrpl15
+</td>
+<td style="text-align:left;">
+2162.26767
+</td>
+<td style="text-align:left;">
+0.3962276
+</td>
+<td style="text-align:left;">
+0.3468265
+</td>
+<td style="text-align:left;">
+1.1424376
+</td>
+<td style="text-align:left;">
+0.2532722
+</td>
+<td style="text-align:left;">
+0.9784152
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm39587|Gm39587
+</td>
+<td style="text-align:left;">
+20.30129
+</td>
+<td style="text-align:left;">
+-2.1136742
+</td>
+<td style="text-align:left;">
+3.3911278
+</td>
+<td style="text-align:left;">
+-0.6232954
+</td>
+<td style="text-align:left;">
+0.5330904
+</td>
+<td style="text-align:left;">
+0.9997970
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lypla1|Lypla1
+</td>
+<td style="text-align:left;">
+994.90242
+</td>
+<td style="text-align:left;">
+0.0198799
+</td>
+<td style="text-align:left;">
+0.8799100
+</td>
+<td style="text-align:left;">
+0.0225931
+</td>
+<td style="text-align:left;">
+0.9819748
+</td>
+<td style="text-align:left;">
+0.9997970
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Xkr4|Xkr4
+</td>
+<td style="text-align:left;">
+4459.42848
+</td>
+<td style="text-align:left;">
+-0.0337912
+</td>
+<td style="text-align:left;">
+0.2715766
+</td>
+<td style="text-align:left;">
+-0.1244260
+</td>
+<td style="text-align:left;">
+0.9009780
+</td>
+<td style="text-align:left;">
+0.9997970
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm39585|Gm39585
+</td>
+<td style="text-align:left;">
+5797.38480
+</td>
+<td style="text-align:left;">
+0.0861245
+</td>
+<td style="text-align:left;">
+0.2414588
+</td>
+<td style="text-align:left;">
+0.3566843
+</td>
+<td style="text-align:left;">
+0.7213282
+</td>
+<td style="text-align:left;">
+0.9997970
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tcea1|Tcea1
+</td>
+<td style="text-align:left;">
+2657.79689
+</td>
+<td style="text-align:left;">
+-0.4037632
+</td>
+<td style="text-align:left;">
+0.3330614
+</td>
+<td style="text-align:left;">
+-1.2122786
+</td>
+<td style="text-align:left;">
+0.2254058
+</td>
+<td style="text-align:left;">
+0.9485680
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rgs20|Rgs20
+</td>
+<td style="text-align:left;">
+422.79650
+</td>
+<td style="text-align:left;">
+-0.1889366
+</td>
+<td style="text-align:left;">
+0.7619761
+</td>
+<td style="text-align:left;">
+-0.2479561
+</td>
+<td style="text-align:left;">
+0.8041684
+</td>
+<td style="text-align:left;">
+0.9997970
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm16041|Gm16041
+</td>
+<td style="text-align:left;">
+21.30106
+</td>
+<td style="text-align:left;">
+7.5945314
+</td>
+<td style="text-align:left;">
+3.6799019
+</td>
+<td style="text-align:left;">
+2.0637864
+</td>
+<td style="text-align:left;">
+0.0390380
+</td>
+<td style="text-align:left;">
+0.6410945
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atp6v1h|Atp6v1h
+</td>
+<td style="text-align:left;">
+10659.10495
+</td>
+<td style="text-align:left;">
+-0.4956230
+</td>
+<td style="text-align:left;">
+0.2967682
+</td>
+<td style="text-align:left;">
+-1.6700675
+</td>
+<td style="text-align:left;">
+0.0949060
+</td>
+<td style="text-align:left;">
+0.8425404
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LOC108167788|LOC108167788
+</td>
+<td style="text-align:left;">
+11.33585
+</td>
+<td style="text-align:left;">
+-0.8220772
+</td>
+<td style="text-align:left;">
+3.4983015
+</td>
+<td style="text-align:left;">
+-0.2349933
+</td>
+<td style="text-align:left;">
+0.8142140
+</td>
+<td style="text-align:left;">
+0.9997970
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Npbwr1|Npbwr1
+</td>
+<td style="text-align:left;">
+924.87540
+</td>
+<td style="text-align:left;">
+-0.3079659
+</td>
+<td style="text-align:left;">
+0.6636912
+</td>
+<td style="text-align:left;">
+-0.4640199
+</td>
+<td style="text-align:left;">
+0.6426335
+</td>
+<td style="text-align:left;">
+0.9997970
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oprk1|Oprk1
+</td>
+<td style="text-align:left;">
+15661.74234
+</td>
+<td style="text-align:left;">
+-0.1442457
+</td>
+<td style="text-align:left;">
+0.3231485
+</td>
+<td style="text-align:left;">
+-0.4463757
+</td>
+<td style="text-align:left;">
+0.6553259
+</td>
+<td style="text-align:left;">
+0.9997970
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+St18|St18
+</td>
+<td style="text-align:left;">
+279.69289
+</td>
+<td style="text-align:left;">
+-2.0082890
+</td>
+<td style="text-align:left;">
+0.9250037
+</td>
+<td style="text-align:left;">
+-2.1711146
+</td>
+<td style="text-align:left;">
+0.0299225
+</td>
+<td style="text-align:left;">
+0.5845690
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rb1cc1|Rb1cc1
+</td>
+<td style="text-align:left;">
+12217.86115
+</td>
+<td style="text-align:left;">
+-0.0796796
+</td>
+<td style="text-align:left;">
+0.2844821
+</td>
+<td style="text-align:left;">
+-0.2800866
+</td>
+<td style="text-align:left;">
+0.7794110
+</td>
+<td style="text-align:left;">
+0.9997970
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4732440D04Rik|4732440D04Rik
+</td>
+<td style="text-align:left;">
+5369.16278
+</td>
+<td style="text-align:left;">
+-0.4918180
+</td>
+<td style="text-align:left;">
+0.2427412
+</td>
+<td style="text-align:left;">
+-2.0261004
+</td>
+<td style="text-align:left;">
+0.0427545
+</td>
+<td style="text-align:left;">
+0.6632640
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm26901|Gm26901
+</td>
+<td style="text-align:left;">
+163.46252
+</td>
+<td style="text-align:left;">
+-0.2293404
+</td>
+<td style="text-align:left;">
+0.9562622
+</td>
+<td style="text-align:left;">
+-0.2398300
+</td>
+<td style="text-align:left;">
+0.8104620
+</td>
+<td style="text-align:left;">
+0.9997970
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pcmtd1|Pcmtd1
+</td>
+<td style="text-align:left;">
+4321.05905
+</td>
+<td style="text-align:left;">
+0.2034726
+</td>
+<td style="text-align:left;">
+0.2645104
+</td>
+<td style="text-align:left;">
+0.7692425
+</td>
+<td style="text-align:left;">
+0.4417494
+</td>
+<td style="text-align:left;">
+0.9997970
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rrs1|Rrs1
+</td>
+<td style="text-align:left;">
+625.86245
+</td>
+<td style="text-align:left;">
+-0.4850563
+</td>
+<td style="text-align:left;">
+0.6605362
+</td>
+<td style="text-align:left;">
+-0.7343371
+</td>
+<td style="text-align:left;">
+0.4627433
+</td>
+<td style="text-align:left;">
+0.9997970
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mybl1|Mybl1
+</td>
+<td style="text-align:left;">
+184.22714
+</td>
+<td style="text-align:left;">
+1.4451732
+</td>
+<td style="text-align:left;">
+1.2066675
+</td>
+<td style="text-align:left;">
+1.1976566
+</td>
+<td style="text-align:left;">
+0.2310507
+</td>
+<td style="text-align:left;">
+0.9561403
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Adhfe1|Adhfe1
+</td>
+<td style="text-align:left;">
+452.68051
+</td>
+<td style="text-align:left;">
+-0.1536903
+</td>
+<td style="text-align:left;">
+0.7879557
+</td>
+<td style="text-align:left;">
+-0.1950494
+</td>
+<td style="text-align:left;">
+0.8453543
+</td>
+<td style="text-align:left;">
+0.9997970
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>out of 23922 with nonzero total read count adjusted p-value &lt; 0.1
+LFC &gt; 0 (up) : 250, 1% LFC &lt; 0 (down) : 48, 0.2% outliers [1] :
+2272, 9.5% low counts [2] : 1352, 5.7% (mean count &lt; 2) [1] see
+‘cooksCutoff’ argument of ?results [2] see ‘independentFiltering’
+argument of ?results</p>
+</div>
+<div id="maintenance-vs-foodtraining" class="section level3"
+number="3.1.2">
+<h3><span class="header-section-number">3.1.2</span> Maintenance vs
+FoodTraining</h3>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:500px; overflow-x: scroll; width:1000px; ">
+<table class="table table-striped table-hover table-condensed table-responsive" style="font-size: 10px; font-family: Arial; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+Craving vs FoodTrained CIVSA Results Overview
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+baseMean
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+log2FoldChange
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+lfcSE
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+stat
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+pvalue
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+padj
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Mrpl15|Mrpl15
+</td>
+<td style="text-align:left;">
+2162.26767
+</td>
+<td style="text-align:left;">
+0.6589546
+</td>
+<td style="text-align:left;">
+0.3707556
+</td>
+<td style="text-align:left;">
+1.7773286
+</td>
+<td style="text-align:left;">
+0.0755142
+</td>
+<td style="text-align:left;">
+0.3782100
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm39587|Gm39587
+</td>
+<td style="text-align:left;">
+20.30129
+</td>
+<td style="text-align:left;">
+-1.7619611
+</td>
+<td style="text-align:left;">
+3.6258386
+</td>
+<td style="text-align:left;">
+-0.4859458
+</td>
+<td style="text-align:left;">
+0.6270056
+</td>
+<td style="text-align:left;">
+0.9345721
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lypla1|Lypla1
+</td>
+<td style="text-align:left;">
+994.90242
+</td>
+<td style="text-align:left;">
+0.0914200
+</td>
+<td style="text-align:left;">
+0.9407122
+</td>
+<td style="text-align:left;">
+0.0971817
+</td>
+<td style="text-align:left;">
+0.9225821
+</td>
+<td style="text-align:left;">
+0.9949371
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Xkr4|Xkr4
+</td>
+<td style="text-align:left;">
+4459.42848
+</td>
+<td style="text-align:left;">
+0.6341912
+</td>
+<td style="text-align:left;">
+0.2902594
+</td>
+<td style="text-align:left;">
+2.1849118
+</td>
+<td style="text-align:left;">
+0.0288953
+</td>
+<td style="text-align:left;">
+0.2180911
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm39585|Gm39585
+</td>
+<td style="text-align:left;">
+5797.38480
+</td>
+<td style="text-align:left;">
+1.1798031
+</td>
+<td style="text-align:left;">
+0.2580070
+</td>
+<td style="text-align:left;">
+4.5727554
+</td>
+<td style="text-align:left;">
+0.0000048
+</td>
+<td style="text-align:left;">
+0.0001973
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tcea1|Tcea1
+</td>
+<td style="text-align:left;">
+2657.79689
+</td>
+<td style="text-align:left;">
+0.1319203
+</td>
+<td style="text-align:left;">
+0.3560044
+</td>
+<td style="text-align:left;">
+0.3705581
+</td>
+<td style="text-align:left;">
+0.7109667
+</td>
+<td style="text-align:left;">
+0.9583981
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rgs20|Rgs20
+</td>
+<td style="text-align:left;">
+422.79650
+</td>
+<td style="text-align:left;">
+0.3482376
+</td>
+<td style="text-align:left;">
+0.8144256
+</td>
+<td style="text-align:left;">
+0.4275868
+</td>
+<td style="text-align:left;">
+0.6689520
+</td>
+<td style="text-align:left;">
+0.9469053
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm16041|Gm16041
+</td>
+<td style="text-align:left;">
+21.30106
+</td>
+<td style="text-align:left;">
+7.1396504
+</td>
+<td style="text-align:left;">
+3.9105846
+</td>
+<td style="text-align:left;">
+1.8257246
+</td>
+<td style="text-align:left;">
+0.0678918
+</td>
+<td style="text-align:left;">
+0.3580246
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atp6v1h|Atp6v1h
+</td>
+<td style="text-align:left;">
+10659.10495
+</td>
+<td style="text-align:left;">
+0.1185235
+</td>
+<td style="text-align:left;">
+0.3172387
+</td>
+<td style="text-align:left;">
+0.3736100
+</td>
+<td style="text-align:left;">
+0.7086945
+</td>
+<td style="text-align:left;">
+0.9576220
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LOC108167788|LOC108167788
+</td>
+<td style="text-align:left;">
+11.33585
+</td>
+<td style="text-align:left;">
+-0.5355535
+</td>
+<td style="text-align:left;">
+3.7403736
+</td>
+<td style="text-align:left;">
+-0.1431818
+</td>
+<td style="text-align:left;">
+0.8861466
+</td>
+<td style="text-align:left;">
+0.9949371
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Npbwr1|Npbwr1
+</td>
+<td style="text-align:left;">
+924.87540
+</td>
+<td style="text-align:left;">
+-0.6449281
+</td>
+<td style="text-align:left;">
+0.7097813
+</td>
+<td style="text-align:left;">
+-0.9086292
+</td>
+<td style="text-align:left;">
+0.3635459
+</td>
+<td style="text-align:left;">
+0.7811879
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oprk1|Oprk1
+</td>
+<td style="text-align:left;">
+15661.74234
+</td>
+<td style="text-align:left;">
+0.2927281
+</td>
+<td style="text-align:left;">
+0.3454541
+</td>
+<td style="text-align:left;">
+0.8473720
+</td>
+<td style="text-align:left;">
+0.3967878
+</td>
+<td style="text-align:left;">
+0.8053124
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+St18|St18
+</td>
+<td style="text-align:left;">
+279.69289
+</td>
+<td style="text-align:left;">
+-1.0473877
+</td>
+<td style="text-align:left;">
+0.9882176
+</td>
+<td style="text-align:left;">
+-1.0598756
+</td>
+<td style="text-align:left;">
+0.2892012
+</td>
+<td style="text-align:left;">
+0.7120102
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rb1cc1|Rb1cc1
+</td>
+<td style="text-align:left;">
+12217.86115
+</td>
+<td style="text-align:left;">
+0.3066224
+</td>
+<td style="text-align:left;">
+0.3041177
+</td>
+<td style="text-align:left;">
+1.0082359
+</td>
+<td style="text-align:left;">
+0.3133412
+</td>
+<td style="text-align:left;">
+0.7348823
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4732440D04Rik|4732440D04Rik
+</td>
+<td style="text-align:left;">
+5369.16278
+</td>
+<td style="text-align:left;">
+-0.1463996
+</td>
+<td style="text-align:left;">
+0.2594995
+</td>
+<td style="text-align:left;">
+-0.5641616
+</td>
+<td style="text-align:left;">
+0.5726441
+</td>
+<td style="text-align:left;">
+0.9132695
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm26901|Gm26901
+</td>
+<td style="text-align:left;">
+163.46252
+</td>
+<td style="text-align:left;">
+-0.7535570
+</td>
+<td style="text-align:left;">
+1.0236447
+</td>
+<td style="text-align:left;">
+-0.7361509
+</td>
+<td style="text-align:left;">
+0.4616389
+</td>
+<td style="text-align:left;">
+0.8511309
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pcmtd1|Pcmtd1
+</td>
+<td style="text-align:left;">
+4321.05905
+</td>
+<td style="text-align:left;">
+0.5461501
+</td>
+<td style="text-align:left;">
+0.2827538
+</td>
+<td style="text-align:left;">
+1.9315391
+</td>
+<td style="text-align:left;">
+0.0534164
+</td>
+<td style="text-align:left;">
+0.3103856
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rrs1|Rrs1
+</td>
+<td style="text-align:left;">
+625.86245
+</td>
+<td style="text-align:left;">
+-0.1126443
+</td>
+<td style="text-align:left;">
+0.7061219
+</td>
+<td style="text-align:left;">
+-0.1595253
+</td>
+<td style="text-align:left;">
+0.8732551
+</td>
+<td style="text-align:left;">
+0.9949371
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mybl1|Mybl1
+</td>
+<td style="text-align:left;">
+184.22714
+</td>
+<td style="text-align:left;">
+-2.0915101
+</td>
+<td style="text-align:left;">
+1.2989231
+</td>
+<td style="text-align:left;">
+-1.6101878
+</td>
+<td style="text-align:left;">
+0.1073569
+</td>
+<td style="text-align:left;">
+0.4493503
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Adhfe1|Adhfe1
+</td>
+<td style="text-align:left;">
+452.68051
+</td>
+<td style="text-align:left;">
+-1.0496649
+</td>
+<td style="text-align:left;">
+0.8432838
+</td>
+<td style="text-align:left;">
+-1.2447350
+</td>
+<td style="text-align:left;">
+0.2132292
+</td>
+<td style="text-align:left;">
+0.6256462
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>out of 23922 with nonzero total read count adjusted p-value &lt; 0.1
+LFC &gt; 0 (up) : 628, 2.6% LFC &lt; 0 (down) : 1046, 4.4% outliers [1]
+: 2272, 9.5% low counts [2] : 2713, 11% (mean count &lt; 6) [1] see
+‘cooksCutoff’ argument of ?results [2] see ‘independentFiltering’
+argument of ?results</p>
+</div>
+<div id="craving-vs-maintenance" class="section level3" number="3.1.3">
+<h3><span class="header-section-number">3.1.3</span> Craving vs
+Maintenance</h3>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:500px; overflow-x: scroll; width:1000px; ">
+<table class="table table-striped table-hover table-condensed table-responsive" style="font-size: 10px; font-family: Arial; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+Craving vs Maintenance CIVSA Results Overview
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+baseMean
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+log2FoldChange
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+lfcSE
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+stat
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+pvalue
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+padj
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Mrpl15|Mrpl15
+</td>
+<td style="text-align:left;">
+2162.26767
+</td>
+<td style="text-align:left;">
+-0.2627261
+</td>
+<td style="text-align:left;">
+0.3466449
+</td>
+<td style="text-align:left;">
+-0.7579115
+</td>
+<td style="text-align:left;">
+0.4485040
+</td>
+<td style="text-align:left;">
+0.8651323
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm39587|Gm39587
+</td>
+<td style="text-align:left;">
+20.30129
+</td>
+<td style="text-align:left;">
+-0.3516955
+</td>
+<td style="text-align:left;">
+3.3976607
+</td>
+<td style="text-align:left;">
+-0.1035111
+</td>
+<td style="text-align:left;">
+0.9175574
+</td>
+<td style="text-align:left;">
+0.9939251
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lypla1|Lypla1
+</td>
+<td style="text-align:left;">
+994.90242
+</td>
+<td style="text-align:left;">
+-0.0715356
+</td>
+<td style="text-align:left;">
+0.8799222
+</td>
+<td style="text-align:left;">
+-0.0812976
+</td>
+<td style="text-align:left;">
+0.9352053
+</td>
+<td style="text-align:left;">
+0.9951721
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Xkr4|Xkr4
+</td>
+<td style="text-align:left;">
+4459.42848
+</td>
+<td style="text-align:left;">
+-0.6679818
+</td>
+<td style="text-align:left;">
+0.2714805
+</td>
+<td style="text-align:left;">
+-2.4605151
+</td>
+<td style="text-align:left;">
+0.0138738
+</td>
+<td style="text-align:left;">
+0.1495170
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm39585|Gm39585
+</td>
+<td style="text-align:left;">
+5797.38480
+</td>
+<td style="text-align:left;">
+-1.0936780
+</td>
+<td style="text-align:left;">
+0.2412810
+</td>
+<td style="text-align:left;">
+-4.5327985
+</td>
+<td style="text-align:left;">
+0.0000058
+</td>
+<td style="text-align:left;">
+0.0002749
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tcea1|Tcea1
+</td>
+<td style="text-align:left;">
+2657.79689
+</td>
+<td style="text-align:left;">
+-0.5356827
+</td>
+<td style="text-align:left;">
+0.3330620
+</td>
+<td style="text-align:left;">
+-1.6083574
+</td>
+<td style="text-align:left;">
+0.1077569
+</td>
+<td style="text-align:left;">
+0.4613839
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rgs20|Rgs20
+</td>
+<td style="text-align:left;">
+422.79650
+</td>
+<td style="text-align:left;">
+-0.5371710
+</td>
+<td style="text-align:left;">
+0.7618243
+</td>
+<td style="text-align:left;">
+-0.7051114
+</td>
+<td style="text-align:left;">
+0.4807409
+</td>
+<td style="text-align:left;">
+0.8833096
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm16041|Gm16041
+</td>
+<td style="text-align:left;">
+21.30106
+</td>
+<td style="text-align:left;">
+0.4549475
+</td>
+<td style="text-align:left;">
+3.4906011
+</td>
+<td style="text-align:left;">
+0.1303350
+</td>
+<td style="text-align:left;">
+0.8963014
+</td>
+<td style="text-align:left;">
+0.9909408
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atp6v1h|Atp6v1h
+</td>
+<td style="text-align:left;">
+10659.10495
+</td>
+<td style="text-align:left;">
+-0.6141458
+</td>
+<td style="text-align:left;">
+0.2967693
+</td>
+<td style="text-align:left;">
+-2.0694383
+</td>
+<td style="text-align:left;">
+0.0385050
+</td>
+<td style="text-align:left;">
+0.2733236
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LOC108167788|LOC108167788
+</td>
+<td style="text-align:left;">
+11.33585
+</td>
+<td style="text-align:left;">
+-0.2865007
+</td>
+<td style="text-align:left;">
+3.5020543
+</td>
+<td style="text-align:left;">
+-0.0818093
+</td>
+<td style="text-align:left;">
+0.9347983
+</td>
+<td style="text-align:left;">
+0.9951721
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Npbwr1|Npbwr1
+</td>
+<td style="text-align:left;">
+924.87540
+</td>
+<td style="text-align:left;">
+0.3369643
+</td>
+<td style="text-align:left;">
+0.6640179
+</td>
+<td style="text-align:left;">
+0.5074627
+</td>
+<td style="text-align:left;">
+0.6118302
+</td>
+<td style="text-align:left;">
+0.9372345
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oprk1|Oprk1
+</td>
+<td style="text-align:left;">
+15661.74234
+</td>
+<td style="text-align:left;">
+-0.4369729
+</td>
+<td style="text-align:left;">
+0.3231413
+</td>
+<td style="text-align:left;">
+-1.3522657
+</td>
+<td style="text-align:left;">
+0.1762903
+</td>
+<td style="text-align:left;">
+0.5932565
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+St18|St18
+</td>
+<td style="text-align:left;">
+279.69289
+</td>
+<td style="text-align:left;">
+-0.9608973
+</td>
+<td style="text-align:left;">
+0.9259208
+</td>
+<td style="text-align:left;">
+-1.0377748
+</td>
+<td style="text-align:left;">
+0.2993749
+</td>
+<td style="text-align:left;">
+0.7560424
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rb1cc1|Rb1cc1
+</td>
+<td style="text-align:left;">
+12217.86115
+</td>
+<td style="text-align:left;">
+-0.3863013
+</td>
+<td style="text-align:left;">
+0.2844705
+</td>
+<td style="text-align:left;">
+-1.3579665
+</td>
+<td style="text-align:left;">
+0.1744743
+</td>
+<td style="text-align:left;">
+0.5910084
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4732440D04Rik|4732440D04Rik
+</td>
+<td style="text-align:left;">
+5369.16278
+</td>
+<td style="text-align:left;">
+-0.3454179
+</td>
+<td style="text-align:left;">
+0.2427896
+</td>
+<td style="text-align:left;">
+-1.4227046
+</td>
+<td style="text-align:left;">
+0.1548218
+</td>
+<td style="text-align:left;">
+0.5589467
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm26901|Gm26901
+</td>
+<td style="text-align:left;">
+163.46252
+</td>
+<td style="text-align:left;">
+0.5242196
+</td>
+<td style="text-align:left;">
+0.9577914
+</td>
+<td style="text-align:left;">
+0.5473213
+</td>
+<td style="text-align:left;">
+0.5841580
+</td>
+<td style="text-align:left;">
+0.9274722
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pcmtd1|Pcmtd1
+</td>
+<td style="text-align:left;">
+4321.05905
+</td>
+<td style="text-align:left;">
+-0.3426769
+</td>
+<td style="text-align:left;">
+0.2644209
+</td>
+<td style="text-align:left;">
+-1.2959526
+</td>
+<td style="text-align:left;">
+0.1949918
+</td>
+<td style="text-align:left;">
+0.6240924
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rrs1|Rrs1
+</td>
+<td style="text-align:left;">
+625.86245
+</td>
+<td style="text-align:left;">
+-0.3724096
+</td>
+<td style="text-align:left;">
+0.6606702
+</td>
+<td style="text-align:left;">
+-0.5636845
+</td>
+<td style="text-align:left;">
+0.5729689
+</td>
+<td style="text-align:left;">
+0.9244236
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mybl1|Mybl1
+</td>
+<td style="text-align:left;">
+184.22714
+</td>
+<td style="text-align:left;">
+3.5366832
+</td>
+<td style="text-align:left;">
+1.2149336
+</td>
+<td style="text-align:left;">
+2.9110094
+</td>
+<td style="text-align:left;">
+0.0036026
+</td>
+<td style="text-align:left;">
+0.0603776
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Adhfe1|Adhfe1
+</td>
+<td style="text-align:left;">
+452.68051
+</td>
+<td style="text-align:left;">
+0.8959769
+</td>
+<td style="text-align:left;">
+0.7889411
+</td>
+<td style="text-align:left;">
+1.1356702
+</td>
+<td style="text-align:left;">
+0.2560946
+</td>
+<td style="text-align:left;">
+0.7074992
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>out of 23922 with nonzero total read count adjusted p-value &lt; 0.1
+LFC &gt; 0 (up) : 1084, 4.5% LFC &lt; 0 (down) : 324, 1.4% outliers [1]
+: 2271, 9.5% low counts [2] : 2713, 11% (mean count &lt; 6) [1] see
+‘cooksCutoff’ argument of ?results [2] see ‘independentFiltering’
+argument of ?results</p>
+</div>
+</div>
+<div id="annotate-results-files-and-pull-significant-degs"
+class="section level2 tabset" number="3.2">
+<h2 class="tabset"><span class="header-section-number">3.2</span>
+Annotate Results Files and Pull Significant DEGs</h2>
+<p>This subsection is for annotation the results files to include all
+necessary information for downstream analyses.</p>
+<p>After annotation I subset the results to only view the significantly
+differentially expressed genes with an adjusted p-value &gt; 0.05.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Subset for significant genes only</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>results_sig <span class="ot">&lt;-</span> <span class="fu">subset</span>(res, padj <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>results_sig2 <span class="ot">&lt;-</span> <span class="fu">subset</span>(res2, padj <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>results_sig3 <span class="ot">&lt;-</span> <span class="fu">subset</span>(res3, padj <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span></code></pre></div>
+<div id="craving-vs-foodtrained" class="section level3" number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> Craving vs
+FoodTrained</h3>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:500px; overflow-x: scroll; width:1000px; ">
+<table class="table table-striped table-hover table-condensed table-responsive" style="font-size: 10px; font-family: Arial; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+Significant DEGs Craving vs FoodTrained
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+baseMean
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+log2FoldChange
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+lfcSE
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+stat
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+pvalue
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+padj
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+symbol
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+description
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+entrez
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+ensembl
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Gm28836|Gm28836
+</td>
+<td style="text-align:left;">
+24.57062
+</td>
+<td style="text-align:left;">
+18.512895
+</td>
+<td style="text-align:left;">
+3.6825760
+</td>
+<td style="text-align:left;">
+5.027159
+</td>
+<td style="text-align:left;">
+0.0000005
+</td>
+<td style="text-align:left;">
+0.0000748
+</td>
+<td style="text-align:left;">
+Gm28836
+</td>
+<td style="text-align:left;">
+predicted gene 28836
+</td>
+<td style="text-align:left;">
+102635593
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Vwa3b|Vwa3b
+</td>
+<td style="text-align:left;">
+68.09876
+</td>
+<td style="text-align:left;">
+9.322079
+</td>
+<td style="text-align:left;">
+2.2726944
+</td>
+<td style="text-align:left;">
+4.101774
+</td>
+<td style="text-align:left;">
+0.0000410
+</td>
+<td style="text-align:left;">
+0.0048096
+</td>
+<td style="text-align:left;">
+Vwa3b
+</td>
+<td style="text-align:left;">
+von Willebrand factor A domain containing 3B
+</td>
+<td style="text-align:left;">
+70853
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4930439A04Rik|4930439A04Rik
+</td>
+<td style="text-align:left;">
+239.71050
+</td>
+<td style="text-align:left;">
+6.086391
+</td>
+<td style="text-align:left;">
+1.0543294
+</td>
+<td style="text-align:left;">
+5.772760
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+0.0000025
+</td>
+<td style="text-align:left;">
+4930439A04Rik
+</td>
+<td style="text-align:left;">
+RIKEN cDNA 4930439A04 gene
+</td>
+<td style="text-align:left;">
+78119
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LOC108167622|LOC108167622
+</td>
+<td style="text-align:left;">
+55.54376
+</td>
+<td style="text-align:left;">
+21.271643
+</td>
+<td style="text-align:left;">
+2.7752955
+</td>
+<td style="text-align:left;">
+7.664641
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+LOC108167622
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pard3bos2|Pard3bos2
+</td>
+<td style="text-align:left;">
+48.12983
+</td>
+<td style="text-align:left;">
+-22.863164
+</td>
+<td style="text-align:left;">
+3.6323379
+</td>
+<td style="text-align:left;">
+-6.294338
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+0.0000002
+</td>
+<td style="text-align:left;">
+Pard3bos2
+</td>
+<td style="text-align:left;">
+par-3 family cell polarity regulator beta, opposite strand 2
+</td>
+<td style="text-align:left;">
+105243940
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Col4a3|Col4a3
+</td>
+<td style="text-align:left;">
+29.96706
+</td>
+<td style="text-align:left;">
+19.601203
+</td>
+<td style="text-align:left;">
+3.5629545
+</td>
+<td style="text-align:left;">
+5.501390
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+0.0000079
+</td>
+<td style="text-align:left;">
+Col4a3
+</td>
+<td style="text-align:left;">
+collagen, type IV, alpha 3
+</td>
+<td style="text-align:left;">
+12828
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dnajb3|Dnajb3
+</td>
+<td style="text-align:left;">
+70.36681
+</td>
+<td style="text-align:left;">
+9.093523
+</td>
+<td style="text-align:left;">
+2.0877638
+</td>
+<td style="text-align:left;">
+4.355628
+</td>
+<td style="text-align:left;">
+0.0000133
+</td>
+<td style="text-align:left;">
+0.0017489
+</td>
+<td style="text-align:left;">
+Dnajb3
+</td>
+<td style="text-align:left;">
+DnaJ heat shock protein family (Hsp40) member B3
+</td>
+<td style="text-align:left;">
+15504
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Asb18|Asb18
+</td>
+<td style="text-align:left;">
+12.85015
+</td>
+<td style="text-align:left;">
+18.822115
+</td>
+<td style="text-align:left;">
+3.6835623
+</td>
+<td style="text-align:left;">
+5.109759
+</td>
+<td style="text-align:left;">
+0.0000003
+</td>
+<td style="text-align:left;">
+0.0000497
+</td>
+<td style="text-align:left;">
+Asb18
+</td>
+<td style="text-align:left;">
+ankyrin repeat and SOCS box-containing 18
+</td>
+<td style="text-align:left;">
+208372
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm41920|Gm41920
+</td>
+<td style="text-align:left;">
+91.39199
+</td>
+<td style="text-align:left;">
+20.766926
+</td>
+<td style="text-align:left;">
+3.6195797
+</td>
+<td style="text-align:left;">
+5.737386
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+0.0000030
+</td>
+<td style="text-align:left;">
+Gm41920
+</td>
+<td style="text-align:left;">
+predicted gene, 41920
+</td>
+<td style="text-align:left;">
+105246666
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LOC105246710|LOC105246710
+</td>
+<td style="text-align:left;">
+41.29964
+</td>
+<td style="text-align:left;">
+21.372039
+</td>
+<td style="text-align:left;">
+3.6789651
+</td>
+<td style="text-align:left;">
+5.809253
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+0.0000022
+</td>
+<td style="text-align:left;">
+LOC105246710
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LOC108167732|LOC108167732
+</td>
+<td style="text-align:left;">
+59.78860
+</td>
+<td style="text-align:left;">
+21.982685
+</td>
+<td style="text-align:left;">
+3.2366754
+</td>
+<td style="text-align:left;">
+6.791749
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+LOC108167732
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fam129a|Fam129a
+</td>
+<td style="text-align:left;">
+58.26340
+</td>
+<td style="text-align:left;">
+9.542099
+</td>
+<td style="text-align:left;">
+2.6179113
+</td>
+<td style="text-align:left;">
+3.644928
+</td>
+<td style="text-align:left;">
+0.0002675
+</td>
+<td style="text-align:left;">
+0.0256134
+</td>
+<td style="text-align:left;">
+Fam129a
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fmo1|Fmo1
+</td>
+<td style="text-align:left;">
+51.26689
+</td>
+<td style="text-align:left;">
+21.615385
+</td>
+<td style="text-align:left;">
+2.7780474
+</td>
+<td style="text-align:left;">
+7.780783
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+Fmo1
+</td>
+<td style="text-align:left;">
+flavin containing monooxygenase 1
+</td>
+<td style="text-align:left;">
+14261
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gorab|Gorab
+</td>
+<td style="text-align:left;">
+666.84329
+</td>
+<td style="text-align:left;">
+2.774594
+</td>
+<td style="text-align:left;">
+0.5327144
+</td>
+<td style="text-align:left;">
+5.208407
+</td>
+<td style="text-align:left;">
+0.0000002
+</td>
+<td style="text-align:left;">
+0.0000307
+</td>
+<td style="text-align:left;">
+Gorab
+</td>
+<td style="text-align:left;">
+golgin, RAB6-interacting
+</td>
+<td style="text-align:left;">
+98376
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dnah14|Dnah14
+</td>
+<td style="text-align:left;">
+41.60299
+</td>
+<td style="text-align:left;">
+21.334681
+</td>
+<td style="text-align:left;">
+3.4180513
+</td>
+<td style="text-align:left;">
+6.241767
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+0.0000003
+</td>
+<td style="text-align:left;">
+Dnah14
+</td>
+<td style="text-align:left;">
+dynein, axonemal, heavy chain 14
+</td>
+<td style="text-align:left;">
+240960
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atf3|Atf3
+</td>
+<td style="text-align:left;">
+433.56152
+</td>
+<td style="text-align:left;">
+-2.808330
+</td>
+<td style="text-align:left;">
+0.7372279
+</td>
+<td style="text-align:left;">
+-3.809311
+</td>
+<td style="text-align:left;">
+0.0001394
+</td>
+<td style="text-align:left;">
+0.0145805
+</td>
+<td style="text-align:left;">
+Atf3
+</td>
+<td style="text-align:left;">
+activating transcription factor 3
+</td>
+<td style="text-align:left;">
+11910
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B230208H11Rik|B230208H11Rik
+</td>
+<td style="text-align:left;">
+48.28040
+</td>
+<td style="text-align:left;">
+21.761939
+</td>
+<td style="text-align:left;">
+2.7106546
+</td>
+<td style="text-align:left;">
+8.028297
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+B230208H11Rik
+</td>
+<td style="text-align:left;">
+RIKEN cDNA B230208H11 gene
+</td>
+<td style="text-align:left;">
+320273
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LOC108167797|LOC108167797
+</td>
+<td style="text-align:left;">
+82.55280
+</td>
+<td style="text-align:left;">
+9.456510
+</td>
+<td style="text-align:left;">
+2.0988898
+</td>
+<td style="text-align:left;">
+4.505482
+</td>
+<td style="text-align:left;">
+0.0000066
+</td>
+<td style="text-align:left;">
+0.0009335
+</td>
+<td style="text-align:left;">
+LOC108167797
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fam26f|Fam26f
+</td>
+<td style="text-align:left;">
+45.72461
+</td>
+<td style="text-align:left;">
+21.035286
+</td>
+<td style="text-align:left;">
+2.7780345
+</td>
+<td style="text-align:left;">
+7.572003
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+Fam26f
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mical1|Mical1
+</td>
+<td style="text-align:left;">
+109.45019
+</td>
+<td style="text-align:left;">
+10.585487
+</td>
+<td style="text-align:left;">
+2.6621850
+</td>
+<td style="text-align:left;">
+3.976240
+</td>
+<td style="text-align:left;">
+0.0000700
+</td>
+<td style="text-align:left;">
+0.0077657
+</td>
+<td style="text-align:left;">
+Mical1
+</td>
+<td style="text-align:left;">
+microtubule associated monooxygenase, calponin and LIM domain containing
+1
+</td>
+<td style="text-align:left;">
+171580
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="maintenance-vs-foodtrained" class="section level3"
+number="3.2.2">
+<h3><span class="header-section-number">3.2.2</span> Maintenance vs
+FoodTrained</h3>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:500px; overflow-x: scroll; width:1000px; ">
+<table class="table table-striped table-hover table-condensed table-responsive" style="font-size: 10px; font-family: Arial; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+Significant DEGs Maintenance vs FoodTrained
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+baseMean
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+log2FoldChange
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+lfcSE
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+stat
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+pvalue
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+padj
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+symbol
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+description
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+entrez
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+ensembl
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Gm39585|Gm39585
+</td>
+<td style="text-align:left;">
+5797.38480
+</td>
+<td style="text-align:left;">
+1.179803
+</td>
+<td style="text-align:left;">
+0.2580070
+</td>
+<td style="text-align:left;">
+4.572755
+</td>
+<td style="text-align:left;">
+0.0000048
+</td>
+<td style="text-align:left;">
+0.0001973
+</td>
+<td style="text-align:left;">
+Gm39585
+</td>
+<td style="text-align:left;">
+predicted gene, 39585
+</td>
+<td style="text-align:left;">
+105243853
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Snhg6|Snhg6
+</td>
+<td style="text-align:left;">
+522.81858
+</td>
+<td style="text-align:left;">
+1.260214
+</td>
+<td style="text-align:left;">
+0.4234933
+</td>
+<td style="text-align:left;">
+2.975758
+</td>
+<td style="text-align:left;">
+0.0029227
+</td>
+<td style="text-align:left;">
+0.0446701
+</td>
+<td style="text-align:left;">
+Snhg6
+</td>
+<td style="text-align:left;">
+small nucleolar RNA host gene 6
+</td>
+<td style="text-align:left;">
+73824
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Trpa1|Trpa1
+</td>
+<td style="text-align:left;">
+47.61966
+</td>
+<td style="text-align:left;">
+-22.462571
+</td>
+<td style="text-align:left;">
+3.6001396
+</td>
+<td style="text-align:left;">
+-6.239361
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+0.0000001
+</td>
+<td style="text-align:left;">
+Trpa1
+</td>
+<td style="text-align:left;">
+transient receptor potential cation channel, subfamily A, member 1
+</td>
+<td style="text-align:left;">
+277328
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rpl7|Rpl7
+</td>
+<td style="text-align:left;">
+2486.96588
+</td>
+<td style="text-align:left;">
+1.005240
+</td>
+<td style="text-align:left;">
+0.3038678
+</td>
+<td style="text-align:left;">
+3.308150
+</td>
+<td style="text-align:left;">
+0.0009391
+</td>
+<td style="text-align:left;">
+0.0184408
+</td>
+<td style="text-align:left;">
+Rpl7
+</td>
+<td style="text-align:left;">
+ribosomal protein L7
+</td>
+<td style="text-align:left;">
+19989
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm28836|Gm28836
+</td>
+<td style="text-align:left;">
+24.57062
+</td>
+<td style="text-align:left;">
+20.693225
+</td>
+<td style="text-align:left;">
+3.9082681
+</td>
+<td style="text-align:left;">
+5.294730
+</td>
+<td style="text-align:left;">
+0.0000001
+</td>
+<td style="text-align:left;">
+0.0000064
+</td>
+<td style="text-align:left;">
+Gm28836
+</td>
+<td style="text-align:left;">
+predicted gene 28836
+</td>
+<td style="text-align:left;">
+102635593
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm32790|Gm32790
+</td>
+<td style="text-align:left;">
+44.07127
+</td>
+<td style="text-align:left;">
+9.563380
+</td>
+<td style="text-align:left;">
+2.2173604
+</td>
+<td style="text-align:left;">
+4.312957
+</td>
+<td style="text-align:left;">
+0.0000161
+</td>
+<td style="text-align:left;">
+0.0005913
+</td>
+<td style="text-align:left;">
+Gm32790
+</td>
+<td style="text-align:left;">
+predicted gene, 32790
+</td>
+<td style="text-align:left;">
+102635458
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fer1l5|Fer1l5
+</td>
+<td style="text-align:left;">
+230.33092
+</td>
+<td style="text-align:left;">
+-2.687277
+</td>
+<td style="text-align:left;">
+0.8236933
+</td>
+<td style="text-align:left;">
+-3.262473
+</td>
+<td style="text-align:left;">
+0.0011044
+</td>
+<td style="text-align:left;">
+0.0209149
+</td>
+<td style="text-align:left;">
+Fer1l5
+</td>
+<td style="text-align:left;">
+fer-1-like 5 (C. elegans)
+</td>
+<td style="text-align:left;">
+100534273
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sema4c|Sema4c
+</td>
+<td style="text-align:left;">
+1298.41081
+</td>
+<td style="text-align:left;">
+-1.822125
+</td>
+<td style="text-align:left;">
+0.6102459
+</td>
+<td style="text-align:left;">
+-2.985887
+</td>
+<td style="text-align:left;">
+0.0028276
+</td>
+<td style="text-align:left;">
+0.0434624
+</td>
+<td style="text-align:left;">
+Sema4c
+</td>
+<td style="text-align:left;">
+sema domain, immunoglobulin domain (Ig), transmembrane domain (TM) and
+short cytoplasmic domain, (semaphorin) 4C
+</td>
+<td style="text-align:left;">
+20353
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Vwa3b|Vwa3b
+</td>
+<td style="text-align:left;">
+68.09876
+</td>
+<td style="text-align:left;">
+8.717777
+</td>
+<td style="text-align:left;">
+2.3896076
+</td>
+<td style="text-align:left;">
+3.648204
+</td>
+<td style="text-align:left;">
+0.0002641
+</td>
+<td style="text-align:left;">
+0.0065801
+</td>
+<td style="text-align:left;">
+Vwa3b
+</td>
+<td style="text-align:left;">
+von Willebrand factor A domain containing 3B
+</td>
+<td style="text-align:left;">
+70853
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4930439A04Rik|4930439A04Rik
+</td>
+<td style="text-align:left;">
+239.71050
+</td>
+<td style="text-align:left;">
+7.561383
+</td>
+<td style="text-align:left;">
+1.1113671
+</td>
+<td style="text-align:left;">
+6.803677
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+4930439A04Rik
+</td>
+<td style="text-align:left;">
+RIKEN cDNA 4930439A04 gene
+</td>
+<td style="text-align:left;">
+78119
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Il1r2|Il1r2
+</td>
+<td style="text-align:left;">
+73.49166
+</td>
+<td style="text-align:left;">
+9.935852
+</td>
+<td style="text-align:left;">
+2.8549805
+</td>
+<td style="text-align:left;">
+3.480182
+</td>
+<td style="text-align:left;">
+0.0005011
+</td>
+<td style="text-align:left;">
+0.0112029
+</td>
+<td style="text-align:left;">
+Il1r2
+</td>
+<td style="text-align:left;">
+interleukin 1 receptor, type II
+</td>
+<td style="text-align:left;">
+16178
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Il1rl2|Il1rl2
+</td>
+<td style="text-align:left;">
+153.74171
+</td>
+<td style="text-align:left;">
+-24.241136
+</td>
+<td style="text-align:left;">
+3.7848523
+</td>
+<td style="text-align:left;">
+-6.404777
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+Il1rl2
+</td>
+<td style="text-align:left;">
+interleukin 1 receptor-like 2
+</td>
+<td style="text-align:left;">
+107527
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LOC108167622|LOC108167622
+</td>
+<td style="text-align:left;">
+55.54376
+</td>
+<td style="text-align:left;">
+21.760261
+</td>
+<td style="text-align:left;">
+2.9333442
+</td>
+<td style="text-align:left;">
+7.418244
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+LOC108167622
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm10561|Gm10561
+</td>
+<td style="text-align:left;">
+31.31746
+</td>
+<td style="text-align:left;">
+-8.823060
+</td>
+<td style="text-align:left;">
+2.8132289
+</td>
+<td style="text-align:left;">
+-3.136275
+</td>
+<td style="text-align:left;">
+0.0017111
+</td>
+<td style="text-align:left;">
+0.0295377
+</td>
+<td style="text-align:left;">
+Gm10561
+</td>
+<td style="text-align:left;">
+predicted gene 10561
+</td>
+<td style="text-align:left;">
+628004
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Clk1|Clk1
+</td>
+<td style="text-align:left;">
+11902.12420
+</td>
+<td style="text-align:left;">
+1.056339
+</td>
+<td style="text-align:left;">
+0.3336618
+</td>
+<td style="text-align:left;">
+3.165897
+</td>
+<td style="text-align:left;">
+0.0015461
+</td>
+<td style="text-align:left;">
+0.0272603
+</td>
+<td style="text-align:left;">
+Clk1
+</td>
+<td style="text-align:left;">
+CDC-like kinase 1
+</td>
+<td style="text-align:left;">
+12747
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Stradb|Stradb
+</td>
+<td style="text-align:left;">
+1233.07664
+</td>
+<td style="text-align:left;">
+1.338207
+</td>
+<td style="text-align:left;">
+0.3402418
+</td>
+<td style="text-align:left;">
+3.933107
+</td>
+<td style="text-align:left;">
+0.0000839
+</td>
+<td style="text-align:left;">
+0.0024506
+</td>
+<td style="text-align:left;">
+Stradb
+</td>
+<td style="text-align:left;">
+STE20-related kinase adaptor beta
+</td>
+<td style="text-align:left;">
+227154
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fam117b|Fam117b
+</td>
+<td style="text-align:left;">
+1077.36822
+</td>
+<td style="text-align:left;">
+1.740967
+</td>
+<td style="text-align:left;">
+0.5934892
+</td>
+<td style="text-align:left;">
+2.933444
+</td>
+<td style="text-align:left;">
+0.0033522
+</td>
+<td style="text-align:left;">
+0.0491723
+</td>
+<td style="text-align:left;">
+Fam117b
+</td>
+<td style="text-align:left;">
+family with sequence similarity 117, member B
+</td>
+<td style="text-align:left;">
+72750
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D230017M19Rik|D230017M19Rik
+</td>
+<td style="text-align:left;">
+353.30341
+</td>
+<td style="text-align:left;">
+1.817985
+</td>
+<td style="text-align:left;">
+0.5121487
+</td>
+<td style="text-align:left;">
+3.549721
+</td>
+<td style="text-align:left;">
+0.0003856
+</td>
+<td style="text-align:left;">
+0.0090159
+</td>
+<td style="text-align:left;">
+D230017M19Rik
+</td>
+<td style="text-align:left;">
+RIKEN cDNA D230017M19 gene
+</td>
+<td style="text-align:left;">
+320933
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Arpc2|Arpc2
+</td>
+<td style="text-align:left;">
+3532.07869
+</td>
+<td style="text-align:left;">
+-1.115469
+</td>
+<td style="text-align:left;">
+0.2391510
+</td>
+<td style="text-align:left;">
+-4.664286
+</td>
+<td style="text-align:left;">
+0.0000031
+</td>
+<td style="text-align:left;">
+0.0001315
+</td>
+<td style="text-align:left;">
+Arpc2
+</td>
+<td style="text-align:left;">
+actin related protein 2/3 complex, subunit 2
+</td>
+<td style="text-align:left;">
+76709
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cnppd1|Cnppd1
+</td>
+<td style="text-align:left;">
+1597.07545
+</td>
+<td style="text-align:left;">
+-1.205071
+</td>
+<td style="text-align:left;">
+0.3232300
+</td>
+<td style="text-align:left;">
+-3.728214
+</td>
+<td style="text-align:left;">
+0.0001928
+</td>
+<td style="text-align:left;">
+0.0049685
+</td>
+<td style="text-align:left;">
+Cnppd1
+</td>
+<td style="text-align:left;">
+cyclin Pas1/PHO80 domain containing 1
+</td>
+<td style="text-align:left;">
+69171
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="craving-vs-maintenance-1" class="section level3"
+number="3.2.3">
+<h3><span class="header-section-number">3.2.3</span> Craving vs
+Maintenance</h3>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:500px; overflow-x: scroll; width:1000px; ">
+<table class="table table-striped table-hover table-condensed table-responsive" style="font-size: 10px; font-family: Arial; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+Significant Craving vs Maintenance
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+baseMean
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+log2FoldChange
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+lfcSE
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+stat
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+pvalue
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+padj
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+symbol
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+description
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+entrez
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+ensembl
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Gm39585|Gm39585
+</td>
+<td style="text-align:left;">
+5797.38480
+</td>
+<td style="text-align:left;">
+-1.0936780
+</td>
+<td style="text-align:left;">
+0.2412810
+</td>
+<td style="text-align:left;">
+-4.532799
+</td>
+<td style="text-align:left;">
+0.0000058
+</td>
+<td style="text-align:left;">
+0.0002749
+</td>
+<td style="text-align:left;">
+Gm39585
+</td>
+<td style="text-align:left;">
+predicted gene, 39585
+</td>
+<td style="text-align:left;">
+105243853
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Trpa1|Trpa1
+</td>
+<td style="text-align:left;">
+47.61966
+</td>
+<td style="text-align:left;">
+20.0711689
+</td>
+<td style="text-align:left;">
+3.3932805
+</td>
+<td style="text-align:left;">
+5.914975
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+0.0000004
+</td>
+<td style="text-align:left;">
+Trpa1
+</td>
+<td style="text-align:left;">
+transient receptor potential cation channel, subfamily A, member 1
+</td>
+<td style="text-align:left;">
+277328
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rpl7|Rpl7
+</td>
+<td style="text-align:left;">
+2486.96588
+</td>
+<td style="text-align:left;">
+-1.0763933
+</td>
+<td style="text-align:left;">
+0.2841797
+</td>
+<td style="text-align:left;">
+-3.787721
+</td>
+<td style="text-align:left;">
+0.0001520
+</td>
+<td style="text-align:left;">
+0.0049557
+</td>
+<td style="text-align:left;">
+Rpl7
+</td>
+<td style="text-align:left;">
+ribosomal protein L7
+</td>
+<td style="text-align:left;">
+19989
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1700001G17Rik|1700001G17Rik
+</td>
+<td style="text-align:left;">
+704.98525
+</td>
+<td style="text-align:left;">
+1.5933623
+</td>
+<td style="text-align:left;">
+0.4255143
+</td>
+<td style="text-align:left;">
+3.744557
+</td>
+<td style="text-align:left;">
+0.0001807
+</td>
+<td style="text-align:left;">
+0.0056755
+</td>
+<td style="text-align:left;">
+1700001G17Rik
+</td>
+<td style="text-align:left;">
+RIKEN cDNA 1700001G17 gene
+</td>
+<td style="text-align:left;">
+67503
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fer1l5|Fer1l5
+</td>
+<td style="text-align:left;">
+230.33092
+</td>
+<td style="text-align:left;">
+2.7365069
+</td>
+<td style="text-align:left;">
+0.7714625
+</td>
+<td style="text-align:left;">
+3.547168
+</td>
+<td style="text-align:left;">
+0.0003894
+</td>
+<td style="text-align:left;">
+0.0105650
+</td>
+<td style="text-align:left;">
+Fer1l5
+</td>
+<td style="text-align:left;">
+fer-1-like 5 (C. elegans)
+</td>
+<td style="text-align:left;">
+100534273
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sema4c|Sema4c
+</td>
+<td style="text-align:left;">
+1298.41081
+</td>
+<td style="text-align:left;">
+1.9826591
+</td>
+<td style="text-align:left;">
+0.5709143
+</td>
+<td style="text-align:left;">
+3.472779
+</td>
+<td style="text-align:left;">
+0.0005151
+</td>
+<td style="text-align:left;">
+0.0131477
+</td>
+<td style="text-align:left;">
+Sema4c
+</td>
+<td style="text-align:left;">
+sema domain, immunoglobulin domain (Ig), transmembrane domain (TM) and
+short cytoplasmic domain, (semaphorin) 4C
+</td>
+<td style="text-align:left;">
+20353
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Il1rl2|Il1rl2
+</td>
+<td style="text-align:left;">
+153.74171
+</td>
+<td style="text-align:left;">
+22.2736364
+</td>
+<td style="text-align:left;">
+3.5649386
+</td>
+<td style="text-align:left;">
+6.247972
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+0.0000001
+</td>
+<td style="text-align:left;">
+Il1rl2
+</td>
+<td style="text-align:left;">
+interleukin 1 receptor-like 2
+</td>
+<td style="text-align:left;">
+107527
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fam126b|Fam126b
+</td>
+<td style="text-align:left;">
+8348.97120
+</td>
+<td style="text-align:left;">
+-0.8264248
+</td>
+<td style="text-align:left;">
+0.2373035
+</td>
+<td style="text-align:left;">
+-3.482565
+</td>
+<td style="text-align:left;">
+0.0004966
+</td>
+<td style="text-align:left;">
+0.0127789
+</td>
+<td style="text-align:left;">
+Fam126b
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pard3bos2|Pard3bos2
+</td>
+<td style="text-align:left;">
+48.12983
+</td>
+<td style="text-align:left;">
+-23.7390363
+</td>
+<td style="text-align:left;">
+3.6316177
+</td>
+<td style="text-align:left;">
+-6.536766
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+0.0000000
+</td>
+<td style="text-align:left;">
+Pard3bos2
+</td>
+<td style="text-align:left;">
+par-3 family cell polarity regulator beta, opposite strand 2
+</td>
+<td style="text-align:left;">
+105243940
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zdbf2|Zdbf2
+</td>
+<td style="text-align:left;">
+3291.47772
+</td>
+<td style="text-align:left;">
+-0.9550029
+</td>
+<td style="text-align:left;">
+0.3014901
+</td>
+<td style="text-align:left;">
+-3.167610
+</td>
+<td style="text-align:left;">
+0.0015370
+</td>
+<td style="text-align:left;">
+0.0313656
+</td>
+<td style="text-align:left;">
+Zdbf2
+</td>
+<td style="text-align:left;">
+zinc finger, DBF-type containing 2
+</td>
+<td style="text-align:left;">
+73884
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Klf7|Klf7
+</td>
+<td style="text-align:left;">
+3114.99312
+</td>
+<td style="text-align:left;">
+-0.6650793
+</td>
+<td style="text-align:left;">
+0.2115799
+</td>
+<td style="text-align:left;">
+-3.143396
+</td>
+<td style="text-align:left;">
+0.0016700
+</td>
+<td style="text-align:left;">
+0.0335025
+</td>
+<td style="text-align:left;">
+Klf7
+</td>
+<td style="text-align:left;">
+Kruppel-like factor 7 (ubiquitous)
+</td>
+<td style="text-align:left;">
+93691
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Map2|Map2
+</td>
+<td style="text-align:left;">
+15113.61849
+</td>
+<td style="text-align:left;">
+-0.6774675
+</td>
+<td style="text-align:left;">
+0.1781094
+</td>
+<td style="text-align:left;">
+-3.803658
+</td>
+<td style="text-align:left;">
+0.0001426
+</td>
+<td style="text-align:left;">
+0.0047204
+</td>
+<td style="text-align:left;">
+Map2
+</td>
+<td style="text-align:left;">
+microtubule-associated protein 2
+</td>
+<td style="text-align:left;">
+17756
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm31047|Gm31047
+</td>
+<td style="text-align:left;">
+43.06422
+</td>
+<td style="text-align:left;">
+19.1697461
+</td>
+<td style="text-align:left;">
+3.6817645
+</td>
+<td style="text-align:left;">
+5.206674
+</td>
+<td style="text-align:left;">
+0.0000002
+</td>
+<td style="text-align:left;">
+0.0000130
+</td>
+<td style="text-align:left;">
+Gm31047
+</td>
+<td style="text-align:left;">
+predicted gene, 31047
+</td>
+<td style="text-align:left;">
+102633145
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Arpc2|Arpc2
+</td>
+<td style="text-align:left;">
+3532.07869
+</td>
+<td style="text-align:left;">
+0.7956339
+</td>
+<td style="text-align:left;">
+0.2237915
+</td>
+<td style="text-align:left;">
+3.555246
+</td>
+<td style="text-align:left;">
+0.0003776
+</td>
+<td style="text-align:left;">
+0.0103047
+</td>
+<td style="text-align:left;">
+Arpc2
+</td>
+<td style="text-align:left;">
+actin related protein 2/3 complex, subunit 2
+</td>
+<td style="text-align:left;">
+76709
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cnppd1|Cnppd1
+</td>
+<td style="text-align:left;">
+1597.07545
+</td>
+<td style="text-align:left;">
+0.9103462
+</td>
+<td style="text-align:left;">
+0.3024970
+</td>
+<td style="text-align:left;">
+3.009439
+</td>
+<td style="text-align:left;">
+0.0026173
+</td>
+<td style="text-align:left;">
+0.0473299
+</td>
+<td style="text-align:left;">
+Cnppd1
+</td>
+<td style="text-align:left;">
+cyclin Pas1/PHO80 domain containing 1
+</td>
+<td style="text-align:left;">
+69171
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dnajb2|Dnajb2
+</td>
+<td style="text-align:left;">
+1487.62355
+</td>
+<td style="text-align:left;">
+1.1910673
+</td>
+<td style="text-align:left;">
+0.3095799
+</td>
+<td style="text-align:left;">
+3.847366
+</td>
+<td style="text-align:left;">
+0.0001194
+</td>
+<td style="text-align:left;">
+0.0040449
+</td>
+<td style="text-align:left;">
+Dnajb2
+</td>
+<td style="text-align:left;">
+DnaJ heat shock protein family (Hsp40) member B2
+</td>
+<td style="text-align:left;">
+56812
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atg9a|Atg9a
+</td>
+<td style="text-align:left;">
+8813.08524
+</td>
+<td style="text-align:left;">
+2.0179237
+</td>
+<td style="text-align:left;">
+0.4649911
+</td>
+<td style="text-align:left;">
+4.339704
+</td>
+<td style="text-align:left;">
+0.0000143
+</td>
+<td style="text-align:left;">
+0.0006226
+</td>
+<td style="text-align:left;">
+Atg9a
+</td>
+<td style="text-align:left;">
+autophagy related 9A
+</td>
+<td style="text-align:left;">
+245860
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Resp18|Resp18
+</td>
+<td style="text-align:left;">
+56768.10866
+</td>
+<td style="text-align:left;">
+-0.8522294
+</td>
+<td style="text-align:left;">
+0.2302091
+</td>
+<td style="text-align:left;">
+-3.701980
+</td>
+<td style="text-align:left;">
+0.0002139
+</td>
+<td style="text-align:left;">
+0.0065238
+</td>
+<td style="text-align:left;">
+Resp18
+</td>
+<td style="text-align:left;">
+regulated endocrine-specific protein 18
+</td>
+<td style="text-align:left;">
+19711
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chpf|Chpf
+</td>
+<td style="text-align:left;">
+11304.97381
+</td>
+<td style="text-align:left;">
+2.0829961
+</td>
+<td style="text-align:left;">
+0.3845635
+</td>
+<td style="text-align:left;">
+5.416520
+</td>
+<td style="text-align:left;">
+0.0000001
+</td>
+<td style="text-align:left;">
+0.0000049
+</td>
+<td style="text-align:left;">
+Chpf
+</td>
+<td style="text-align:left;">
+chondroitin polymerizing factor
+</td>
+<td style="text-align:left;">
+74241
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tmem198|Tmem198
+</td>
+<td style="text-align:left;">
+3311.19558
+</td>
+<td style="text-align:left;">
+1.5407766
+</td>
+<td style="text-align:left;">
+0.3702558
+</td>
+<td style="text-align:left;">
+4.161384
+</td>
+<td style="text-align:left;">
+0.0000316
+</td>
+<td style="text-align:left;">
+0.0012693
+</td>
+<td style="text-align:left;">
+Tmem198
+</td>
+<td style="text-align:left;">
+transmembrane protein 198
+</td>
+<td style="text-align:left;">
+319998
+</td>
+<td style="text-align:left;">
+ENSMUSG0….
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="visualize-shrinkage-estimations" class="section level2"
+number="3.3">
+<h2><span class="header-section-number">3.3</span> Visualize Shrinkage
+Estimations</h2>
+<p>Following subsetting, I want to see how the data looks based on
+effect size so I have run a shrinkage model using the “apeglm” method
+which normalizes counts based on effect size without major changes to
+data structure. I have included non-shrunk models as well for
+comparison.</p>
+<div id="non-shrunken-l2fc" class="section level3 tabset"
+number="3.3.1">
+<h3 class="tabset"><span class="header-section-number">3.3.1</span>
+Non-Shrunken L2FC</h3>
+<div id="craving-vs-foodtrained-1" class="section level4"
+number="3.3.1.1">
+<h4><span class="header-section-number">3.3.1.1</span> Craving vs
+FoodTrained</h4>
+<p><img src="figure/index.Rmd/Non-Shrunken%20Estimate%20Plots-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="maintenance-vs-foodtrained-1" class="section level4"
+number="3.3.1.2">
+<h4><span class="header-section-number">3.3.1.2</span> Maintenance vs
+FoodTrained</h4>
+<p><img src="figure/index.Rmd/Non-Shrunken%20Estimate%20Plots2-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="craving-vs-maintenance-2" class="section level4"
+number="3.3.1.3">
+<h4><span class="header-section-number">3.3.1.3</span> Craving vs
+Maintenance</h4>
+<p><img src="figure/index.Rmd/Non-Shrunken%20Estimate%20Plots3-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="shrunken-l2fc" class="section level3 tabset" number="3.3.2">
+<h3 class="tabset"><span class="header-section-number">3.3.2</span>
+Shrunken L2FC</h3>
+<div id="craving-vs-foodtrained-2" class="section level4"
+number="3.3.2.1">
+<h4><span class="header-section-number">3.3.2.1</span> Craving vs
+FoodTrained</h4>
+<p><img src="figure/index.Rmd/Shrunken%20Estimate%20Plots-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="maintenance-vs-foodtrained-2" class="section level4"
+number="3.3.2.2">
+<h4><span class="header-section-number">3.3.2.2</span> Maintenance vs
+FoodTrained</h4>
+<p><img src="figure/index.Rmd/Shrunken%20Estimate%20Plots2-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="craving-vs-maintenance-3" class="section level4"
+number="3.3.2.3">
+<h4><span class="header-section-number">3.3.2.3</span> Craving vs
+Maintenance</h4>
+<p><img src="figure/index.Rmd/Shrunken%20Estimate%20Plots3-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+</div>
+<div id="looking-at-differentially-expressed-genes"
+class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Looking at
+Differentially Expressed Genes</h1>
+<p>We can generate a matrix to identify where our differentially
+expressed genes lie between each group based on an alpha value of
+0.05.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Matrix Visualizaattion</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">vsDEGMatrix</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> dds, <span class="at">padj =</span> <span class="fl">0.05</span>, <span class="at">d.factor =</span> <span class="st">&quot;condition&quot;</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;deseq&quot;</span>, <span class="at">title =</span> <span class="cn">TRUE</span>, <span class="at">legend =</span> <span class="cn">TRUE</span>, <span class="at">grid =</span> <span class="cn">TRUE</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="figure/index.Rmd/Matrix%20of%20Differentially%20Expressed%20genes%20across%20groups-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="data-visualization" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Data Visualization</h1>
+<div id="normalized-counts-and-plots-of-genes-of-interest"
+class="section level2 tabset" number="5.1">
+<h2 class="tabset"><span class="header-section-number">5.1</span>
+Normalized Counts and Plots of Genes of Interest</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>level_order <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;FoodTrained&quot;</span>, <span class="st">&quot;Maintenance&quot;</span>, <span class="st">&quot;Craving&quot;</span>) <span class="co"># this vector might be useful for other plots/analyses</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>normalized_counts <span class="ot">&lt;-</span> <span class="fu">counts</span>(dds, <span class="at">normalized =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div id="grin1" class="section level3" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> Grin1</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">####################################### HSPA8</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>d2 <span class="ot">&lt;-</span> <span class="fu">plotCounts</span>(dds,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">gene =</span> <span class="st">&quot;Grin1|Grin1&quot;</span>, <span class="at">intgroup =</span> <span class="st">&quot;condition&quot;</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">returnData =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(d2, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(condition, <span class="at">level =</span> level_order), <span class="at">y =</span> count, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_jitter</span>(<span class="at">w =</span> <span class="fl">0.1</span>, <span class="at">h =</span> <span class="dv">0</span>), <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Condition&quot;</span>)<span class="sc">+</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Normalized Counts&quot;</span>)<span class="sc">+</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;Grin1 Expression&quot;</span>,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Normalized Gene Expression&quot;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>a</span></code></pre></div>
+<p><img src="figure/index.Rmd/Selected%20Genes-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="gabbr1" class="section level3" number="5.1.2">
+<h3><span class="header-section-number">5.1.2</span> Gabbr1</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">####################################### HSP90ab1</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>d2 <span class="ot">&lt;-</span> <span class="fu">plotCounts</span>(dds,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">gene =</span> <span class="st">&quot;Gabbr1|Gabbr1&quot;</span>, <span class="at">intgroup =</span> <span class="st">&quot;condition&quot;</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">returnData =</span> <span class="cn">TRUE</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(d2, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(condition, <span class="at">level =</span> level_order), <span class="at">y =</span> count, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_jitter</span>(<span class="at">w =</span> <span class="fl">0.1</span>, <span class="at">h =</span> <span class="dv">0</span>), <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Condition&quot;</span>)<span class="sc">+</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Normalized Counts&quot;</span>)<span class="sc">+</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;Gabbr1 Expression&quot;</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Normalized Gene Expression&quot;</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>a</span></code></pre></div>
+<p><img src="figure/index.Rmd/Selected%20Genes2-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="th" class="section level3" number="5.1.3">
+<h3><span class="header-section-number">5.1.3</span> Th</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">####################################### Dnajb1</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>d2 <span class="ot">&lt;-</span> <span class="fu">plotCounts</span>(dds,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">gene =</span> <span class="st">&quot;Th|Th&quot;</span>, <span class="at">intgroup =</span> <span class="st">&quot;condition&quot;</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">returnData =</span> <span class="cn">TRUE</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(d2, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(condition, <span class="at">level =</span> level_order), <span class="at">y =</span> count, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_jitter</span>(<span class="at">w =</span> <span class="fl">0.1</span>, <span class="at">h =</span> <span class="dv">0</span>), <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Condition&quot;</span>)<span class="sc">+</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Normalized Counts&quot;</span>)<span class="sc">+</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;Th Expression&quot;</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Normalized Gene Expression&quot;</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>a</span></code></pre></div>
+<p><img src="figure/index.Rmd/Selected%20Genes3-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="ehmt2" class="section level3" number="5.1.4">
+<h3><span class="header-section-number">5.1.4</span> Ehmt2</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">####################################### Dnajb1</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>d2 <span class="ot">&lt;-</span> <span class="fu">plotCounts</span>(dds,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">gene =</span> <span class="st">&quot;Ehmt2|Ehmt2&quot;</span>, <span class="at">intgroup =</span> <span class="st">&quot;condition&quot;</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">returnData =</span> <span class="cn">TRUE</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(d2, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(condition, <span class="at">level =</span> level_order), <span class="at">y =</span> count, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_jitter</span>(<span class="at">w =</span> <span class="fl">0.1</span>, <span class="at">h =</span> <span class="dv">0</span>), <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Condition&quot;</span>)<span class="sc">+</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Normalized Counts&quot;</span>)<span class="sc">+</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;Ehmt2 Expression&quot;</span>,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Normalized Gene Expression&quot;</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>a</span></code></pre></div>
+<p><img src="figure/index.Rmd/Selected%20Genes4-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="setdb1" class="section level3" number="5.1.5">
+<h3><span class="header-section-number">5.1.5</span> Setdb1</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="do">####################################### Dnajb1</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>d2 <span class="ot">&lt;-</span> <span class="fu">plotCounts</span>(dds,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">gene =</span> <span class="st">&quot;Setdb1|Setdb1&quot;</span>, <span class="at">intgroup =</span> <span class="st">&quot;condition&quot;</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">returnData =</span> <span class="cn">TRUE</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(d2, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(condition, <span class="at">level =</span> level_order), <span class="at">y =</span> count, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_jitter</span>(<span class="at">w =</span> <span class="fl">0.1</span>, <span class="at">h =</span> <span class="dv">0</span>), <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Condition&quot;</span>)<span class="sc">+</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Normalized Counts&quot;</span>)<span class="sc">+</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;Setdb1 Expression&quot;</span>,</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Normalized Gene Expression&quot;</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>a</span></code></pre></div>
+<p><img src="figure/index.Rmd/Selected%20Genes5-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="atf7ip" class="section level3" number="5.1.6">
+<h3><span class="header-section-number">5.1.6</span> Atf7ip</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="do">####################################### Dnajb1</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>d2 <span class="ot">&lt;-</span> <span class="fu">plotCounts</span>(dds,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">gene =</span> <span class="st">&quot;Atf7ip|Atf7ip&quot;</span>, <span class="at">intgroup =</span> <span class="st">&quot;condition&quot;</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">returnData =</span> <span class="cn">TRUE</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(d2, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(condition, <span class="at">level =</span> level_order), <span class="at">y =</span> count, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_jitter</span>(<span class="at">w =</span> <span class="fl">0.1</span>, <span class="at">h =</span> <span class="dv">0</span>), <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Condition&quot;</span>)<span class="sc">+</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Normalized Counts&quot;</span>)<span class="sc">+</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;Atf7ip Expression&quot;</span>,</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Normalized Gene Expression&quot;</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>a</span></code></pre></div>
+<p><img src="figure/index.Rmd/Selected%20Genes6-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="visualize-results-pca" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Visualize Results:
+PCA</h2>
+<p>For visualization I am converting all analyses to logarithmic.
+Following this I have completed a PCA for each analyses based on all
+genes together.</p>
+<pre><code>png 
+  2 </code></pre>
+<p><img src="figure/index.Rmd/Plot%20PCA-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="visualize-results-venn-diagrams" class="section level2 tabset"
+number="5.3">
+<h2 class="tabset"><span class="header-section-number">5.3</span>
+Visualize Results Venn Diagrams</h2>
+<div id="up-regulated-genes" class="section level3" number="5.3.1">
+<h3><span class="header-section-number">5.3.1</span> Up-Regulated
+Genes</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>myCol <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="dv">3</span>, <span class="st">&quot;Pastel2&quot;</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>results_sig_Table_up <span class="ot">&lt;-</span> <span class="fu">subset</span>(results_sig, log2FoldChange <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>results_sig2_Table_up <span class="ot">&lt;-</span> <span class="fu">subset</span>(results_sig2, log2FoldChange <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>results_sig3_Table_up <span class="ot">&lt;-</span> <span class="fu">subset</span>(results_sig3, log2FoldChange <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>new_ressig1_up  <span class="ot">&lt;-</span> <span class="fu">rownames</span>(results_sig_Table_up)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>new_ressig2_up <span class="ot">&lt;-</span> <span class="fu">rownames</span>(results_sig2_Table_up)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>new_ressig3_up  <span class="ot">&lt;-</span> <span class="fu">rownames</span>(results_sig3_Table_up)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate Venn Diagram </span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>venn.plot.up <span class="ot">&lt;-</span> <span class="fu">venn.diagram</span>(</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">list</span>(</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Crv_vs_FT&quot;</span> <span class="ot">=</span> new_ressig1_up,</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Maint_vs_FT&quot;</span> <span class="ot">=</span> new_ressig2_up,</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Crv_vs_Maint&quot;</span> <span class="ot">=</span> new_ressig3_up),</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> myCol,</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex =</span> .<span class="dv">8</span>,</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">fontface =</span> <span class="st">&quot;bold&quot;</span>,</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">fontfamily =</span> <span class="st">&quot;sans&quot;</span>,</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">cat.cex =</span> <span class="fl">0.8</span>,</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">cat.fontface =</span> <span class="st">&quot;bold&quot;</span>,</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">cat.default.pos =</span> <span class="st">&quot;outer&quot;</span>,</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">cat.pos =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">cat.fontfamily =</span> <span class="st">&quot;sans&quot;</span>,</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">rotation =</span> <span class="dv">1</span>,</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">category.names =</span> <span class="fu">c</span>(<span class="st">&quot;Craving_vs_FoodTrained&quot;</span>, <span class="st">&quot;Maintenance_vs_FoodTrained&quot;</span>, <span class="st">&quot;Craving_vs_Maintenance&quot;</span>),</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">filename =</span> <span class="cn">NULL</span>,</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">output =</span> <span class="cn">TRUE</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Save Venn Diagram</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="st">&quot;plots/CIVSA_venn_diagram_Up.pdf&quot;</span>)</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.draw</span>(venn.plot.up)</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<pre><code>png 
+  2 </code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display Venn Diagram in RStudio</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.draw</span>(venn.plot.up)</span></code></pre></div>
+<p><img src="figure/index.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="down-regulated-genes" class="section level3" number="5.3.2">
+<h3><span class="header-section-number">5.3.2</span> Down-Regulated
+Genes</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>results_sig_Table_down <span class="ot">&lt;-</span> <span class="fu">subset</span>(results_sig, log2FoldChange <span class="sc">&lt;</span> <span class="dv">0</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>results_sig2_Table_down <span class="ot">&lt;-</span> <span class="fu">subset</span>(results_sig2, log2FoldChange <span class="sc">&lt;</span> <span class="dv">0</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>results_sig3_Table_down <span class="ot">&lt;-</span> <span class="fu">subset</span>(results_sig3, log2FoldChange <span class="sc">&lt;</span> <span class="dv">0</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>new_ressig1_down  <span class="ot">&lt;-</span> <span class="fu">rownames</span>(results_sig_Table_down)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>new_ressig2_down  <span class="ot">&lt;-</span> <span class="fu">rownames</span>(results_sig2_Table_down)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>new_ressig3_down  <span class="ot">&lt;-</span> <span class="fu">rownames</span>(results_sig3_Table_down)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate Venn Diagram UP</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>venn.plot.down <span class="ot">&lt;-</span> <span class="fu">venn.diagram</span>(</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">list</span>(</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Crv_vs_FT&quot;</span> <span class="ot">=</span> new_ressig1_down,</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Maint_vs_FT&quot;</span> <span class="ot">=</span> new_ressig2_down,</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Crv_vs_Maint&quot;</span> <span class="ot">=</span> new_ressig3_down),</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> myCol,</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex =</span> .<span class="dv">8</span>,</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">fontface =</span> <span class="st">&quot;bold&quot;</span>,</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">fontfamily =</span> <span class="st">&quot;sans&quot;</span>,</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">cat.cex =</span> <span class="fl">0.8</span>,</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">cat.fontface =</span> <span class="st">&quot;bold&quot;</span>,</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">cat.default.pos =</span> <span class="st">&quot;outer&quot;</span>,</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">cat.pos =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">cat.fontfamily =</span> <span class="st">&quot;sans&quot;</span>,</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">rotation =</span> <span class="dv">1</span>,</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">category.names =</span> <span class="fu">c</span>(<span class="st">&quot;Craving_vs_FoodTrained&quot;</span>, <span class="st">&quot;Maintenance_vs_FoodTrained&quot;</span>, <span class="st">&quot;Craving_vs_Maintenance&quot;</span>),</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">filename =</span> <span class="cn">NULL</span>,</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">output =</span> <span class="cn">TRUE</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Save Venn Diagram</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="st">&quot;plots/CIVSA_venn_diagram_Down.pdf&quot;</span>)</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.draw</span>(venn.plot.down)</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<pre><code>png 
+  2 </code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display Venn Diagram in RStudio</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.draw</span>(venn.plot.down)</span></code></pre></div>
+<p><img src="figure/index.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="visualize-results-heatmap-data-generation"
+class="section level2" number="5.4">
+<h2><span class="header-section-number">5.4</span> Visualize Results:
+Heatmap (Data Generation)</h2>
+</div>
+<div id="visualize-results-heatmap" class="section level2 tabset"
+number="5.5">
+<h2 class="tabset"><span class="header-section-number">5.5</span>
+Visualize Results: Heatmap</h2>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ressig1 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(results_sig)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>ressig2 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(results_sig2)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>ressig3 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(results_sig3)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>ressig1<span class="sc">$</span>Comparison <span class="ot">&lt;-</span> <span class="st">&quot;Craving vs FoodTrained&quot;</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>ressig2<span class="sc">$</span>Comparison <span class="ot">&lt;-</span> <span class="st">&quot;Maintenance vs FoodTrained&quot;</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>ressig3<span class="sc">$</span>Comparison <span class="ot">&lt;-</span> <span class="st">&quot;Craving vs Maintenance&quot;</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>ressig1_highlfc_pos <span class="ot">&lt;-</span> ressig1[ressig1<span class="sc">$</span>log2FoldChange <span class="sc">&gt;=</span> <span class="fl">1.5</span>,]</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>ressig1_highlfc_neg <span class="ot">&lt;-</span> ressig1[ressig1<span class="sc">$</span>log2FoldChange <span class="sc">&lt;=</span> <span class="sc">-</span><span class="fl">1.5</span>,]</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>ressig2_highlfc_pos <span class="ot">&lt;-</span> ressig2[ressig2<span class="sc">$</span>log2FoldChange <span class="sc">&gt;=</span> <span class="fl">1.5</span>,]</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>ressig2_highlfc_neg <span class="ot">&lt;-</span> ressig2[ressig2<span class="sc">$</span>log2FoldChange <span class="sc">&lt;=</span> <span class="sc">-</span><span class="fl">1.5</span>,]</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>ressig3_highlfc_pos <span class="ot">&lt;-</span> ressig3[ressig3<span class="sc">$</span>log2FoldChange <span class="sc">&gt;=</span> <span class="fl">1.5</span>,]</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>ressig3_highlfc_neg <span class="ot">&lt;-</span> ressig3[ressig3<span class="sc">$</span>log2FoldChange <span class="sc">&lt;=</span> <span class="sc">-</span><span class="fl">1.5</span>,]</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>temp_sigdegshm <span class="ot">&lt;-</span> <span class="fu">rbind</span>(ressig1_highlfc_pos, ressig1_highlfc_neg)</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>temp_sigdegshm2 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(temp_sigdegshm, ressig2_highlfc_pos)</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>temp_sigdegshm3 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(temp_sigdegshm2, ressig2_highlfc_neg)</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>temp_sigdegshm4 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(temp_sigdegshm3, ressig3_highlfc_pos)</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>temp_sigdegshm5 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(temp_sigdegshm4, ressig3_highlfc_neg)</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>temp_sigdegshm6 <span class="ot">&lt;-</span> temp_sigdegshm5[temp_sigdegshm5<span class="sc">$</span>lfcSE <span class="sc">&lt;=</span><span class="dv">1</span>,]</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>dup_rows <span class="ot">&lt;-</span> <span class="fu">duplicated</span>(temp_sigdegshm6<span class="sc">$</span>symbol)</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>data_dedup <span class="ot">&lt;-</span> temp_sigdegshm6[<span class="sc">!</span>dup_rows, ]</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>rows <span class="ot">&lt;-</span> <span class="fu">rownames</span>(data_dedup)</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>select <span class="ot">&lt;-</span> <span class="fu">order</span>(<span class="fu">rowMeans</span>(<span class="fu">counts</span>(dds,<span class="at">normalized=</span><span class="cn">TRUE</span>)),</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>                <span class="at">decreasing=</span><span class="cn">TRUE</span>)<span class="co">#[1:1500]</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>mat <span class="ot">&lt;-</span> <span class="fu">assay</span>(ddsMat_rlog)[select,]</span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>data_mod <span class="ot">&lt;-</span> mat[<span class="fu">rownames</span>(mat) <span class="sc">%in%</span> rows, ] </span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>matrownames_data_mod <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">rownames</span>(data_mod))</span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>matrownames_data_mod <span class="ot">&lt;-</span> matrownames_data_mod <span class="sc">%&gt;%</span> <span class="fu">separate</span>(rownames.data_mod., <span class="fu">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;symbol&quot;</span>),<span class="at">sep =</span><span class="st">&quot;([|])&quot;</span>)</span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">as.tibble</span>(<span class="fu">read.csv</span>(<span class="st">&quot;data/sample_info_CIVSA.csv&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>))</span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>annot_col <span class="ot">&lt;-</span> samples <span class="sc">%&gt;%</span></span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">&#39;samplename&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>ann_colors <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">condition =</span> <span class="fu">as.factor</span>(<span class="fu">c</span>(<span class="at">FoodTrained =</span> <span class="st">&quot;slateblue2&quot;</span>, <span class="at">Maintenance =</span> <span class="st">&quot;limegreen&quot;</span>, <span class="at">Craving =</span> <span class="st">&quot;violetred2&quot;</span>)),</span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">Group =</span> <span class="fu">as.factor</span>(<span class="fu">c</span>(<span class="at">FoodTrained =</span> <span class="st">&quot;slateblue2&quot;</span>, <span class="at">Maintenance =</span> <span class="st">&quot;limegreen&quot;</span>, <span class="at">Craving =</span> <span class="st">&quot;violetred2&quot;</span>)))</span></code></pre></div>
+<div id="unsupervised-clustering" class="section level3" number="5.5.1">
+<h3><span class="header-section-number">5.5.1</span> Unsupervised
+Clustering</h3>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">mat =</span> data_mod,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> <span class="fu">colorRampPalette</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">11</span>, <span class="st">&quot;RdYlBu&quot;</span>)))(<span class="dv">155</span>),</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">scale =</span> <span class="st">&quot;row&quot;</span>, <span class="co"># Scale genes to Z-score (how many standard deviations),</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">annotation_col =</span> annot_col,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#annotation_colors = ann_colors,# Change the default colors of the annotations</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">fontsize =</span> <span class="dv">5</span>, <span class="co"># Make fonts smaller</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#cellwidth = 15, # Make the cells wider</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">#cellheight = 4.5, # Make the cells wider</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_colnames =</span> F,</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_rows =</span> T,</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_cols =</span> T,</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">annotation_legend =</span> T,</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> T,</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_rownames =</span> F,</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">clustering_distance_rows =</span> <span class="st">&quot;correlation&quot;</span>,</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">clustering_method =</span> <span class="st">&quot;ward.D&quot;</span>,</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Heatmap of Significant DEGs -- Unsupervised Clustering&quot;</span>,</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_row_slices =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_row_dend =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutree_rows =</span> <span class="dv">4</span>,</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutree_cols =</span> <span class="dv">3</span>,</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">treeheight_row =</span> <span class="dv">10</span>,</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">treeheight_col =</span> <span class="dv">10</span>,</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># kmeans_k = 4,</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># display_numbers = TRUE,</span></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>  <span class="co">#filename = &quot;plots/CIVSA2_HeatmapDEGs_Unsupervised.pdf&quot;,</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend_labels =</span> <span class="fu">c</span>(<span class="st">&quot;FoodTrained&quot;</span>, <span class="st">&quot;Maintenance&quot;</span>, <span class="st">&quot;Craving&quot;</span>)</span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>  <span class="co">#labels_row = matrownames_data_mod$symbol</span></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="figure/index.Rmd/Filter%20Heatmaps%20by%20DEGs2%20Unsupervised-1.png" width="768" style="display: block; margin: auto;" />
+### Supervised Clustering</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">mat =</span> data_mod,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> <span class="fu">colorRampPalette</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">11</span>, <span class="st">&quot;RdYlBu&quot;</span>)))(<span class="dv">155</span>),</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">scale =</span> <span class="st">&quot;row&quot;</span>, <span class="co"># Scale genes to Z-score (how many standard deviations),</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">annotation_col =</span> annot_col,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#annotation_colors = ann_colors,# Change the default colors of the annotations</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">fontsize =</span> <span class="dv">8</span>, <span class="co"># Make fonts smaller</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">cellwidth =</span> <span class="dv">10</span>, <span class="co"># Make the cells wider</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">cellheight =</span> <span class="dv">3</span>, <span class="co"># Make the cells wider</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_colnames =</span> F,</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_rows =</span> T,</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_cols =</span> F,</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">annotation_legend =</span> T,</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> T,</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_rownames =</span> F,</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">clustering_distance_rows =</span> <span class="st">&quot;correlation&quot;</span>,</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">clustering_method =</span> <span class="st">&quot;ward.D&quot;</span>,</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Heatmap of Significant DEGs -- Supervised Clustering&quot;</span>,</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_row_slices =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_row_dend =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutree_rows =</span> <span class="dv">4</span>,</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutree_cols =</span> <span class="dv">3</span>,</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">gaps_col =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">7</span>),</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">treeheight_row =</span> <span class="dv">10</span>,</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">treeheight_col =</span> <span class="dv">10</span>,</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># kmeans_k = 4,</span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># display_numbers = TRUE,</span></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>  <span class="co">#filename = &quot;plots/CIVSA2_HeatmapDEGs_Final_Unclustered.pdf&quot;,</span></span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend_labels =</span> <span class="fu">c</span>(<span class="st">&quot;FoodTrained&quot;</span>, <span class="st">&quot;Maintenance&quot;</span>, <span class="st">&quot;Craving&quot;</span>),</span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="figure/index.Rmd/Filter%20Heatmaps%20by%20DEGs2%20Supervised-1.png" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># labels_row = matrownames_data_mod$symbol)</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">mat =</span> data_mod,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> <span class="fu">colorRampPalette</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">11</span>, <span class="st">&quot;RdYlBu&quot;</span>)))(<span class="dv">155</span>),</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">scale =</span> <span class="st">&quot;row&quot;</span>, <span class="co"># Scale genes to Z-score (how many standard deviations),</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">annotation_col =</span> annot_col,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#annotation_colors = ann_colors,# Change the default colors of the annotations</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">fontsize =</span> <span class="dv">8</span>, <span class="co"># Make fonts smaller</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a> <span class="co">#cellwidth = 10, # Make the cells wider</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">#cellheight = 3, # Make the cells wider</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_colnames =</span> F,</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_rows =</span> T,</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_cols =</span> F,</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">annotation_legend =</span> T,</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> T,</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_rownames =</span> F,</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">clustering_distance_rows =</span> <span class="st">&quot;correlation&quot;</span>,</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">clustering_method =</span> <span class="st">&quot;ward.D&quot;</span>,</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Heatmap of Significant DEGs -- Supervised Clustering&quot;</span>,</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_row_slices =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_row_dend =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutree_rows =</span> <span class="dv">4</span>,</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutree_cols =</span> <span class="dv">3</span>,</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">gaps_col =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">7</span>),</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">treeheight_row =</span> <span class="dv">10</span>,</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">treeheight_col =</span> <span class="dv">10</span>,</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># kmeans_k = 4,</span></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># display_numbers = TRUE,</span></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>  <span class="co">#filename = &quot;plots/CIVSA2_HeatmapDEGs_Final_Unclustered_Condensed.pdf&quot;,</span></span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend_labels =</span> <span class="fu">c</span>(<span class="st">&quot;FoodTrained&quot;</span>, <span class="st">&quot;Maintenance&quot;</span>, <span class="st">&quot;Craving&quot;</span>),</span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="figure/index.Rmd/Filter%20Heatmaps%20by%20DEGs2%20Condensed-Supervised-1.png" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># labels_row = matrownames_data_mod$symbol)</span></span></code></pre></div>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>R version 4.2.1 (2022-06-23)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 22.04.4 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.10.0
+LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.10.0
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] grid      stats4    stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] BiocParallel_1.32.6                      
+ [2] conflicted_1.2.0                         
+ [3] VennDiagram_1.7.3                        
+ [4] futile.logger_1.4.3                      
+ [5] regionReport_1.32.0                      
+ [6] kableExtra_1.3.4                         
+ [7] vidger_1.18.0                            
+ [8] tables_0.9.17                            
+ [9] knitr_1.43                               
+[10] Glimma_2.8.0                             
+[11] Mus.musculus_1.3.1                       
+[12] TxDb.Mmusculus.UCSC.mm10.knownGene_3.10.0
+[13] OrganismDbi_1.40.0                       
+[14] GenomicFeatures_1.50.4                   
+[15] gplots_3.1.3                             
+[16] lubridate_1.9.2                          
+[17] forcats_1.0.0                            
+[18] stringr_1.5.1                            
+[19] purrr_1.0.2                              
+[20] readr_2.1.4                              
+[21] tibble_3.2.1                             
+[22] tidyverse_2.0.0                          
+[23] statmod_1.5.0                            
+[24] tweeDEseqCountData_1.36.0                
+[25] edgeR_3.40.2                             
+[26] limma_3.54.2                             
+[27] GOSemSim_2.24.0                          
+[28] apeglm_1.20.0                            
+[29] ggpubr_0.6.0                             
+[30] SPIA_2.50.0                              
+[31] KEGGgraph_1.58.3                         
+[32] ggnewscale_0.4.9                         
+[33] enrichplot_1.18.4                        
+[34] tidyr_1.3.1                              
+[35] WGCNA_1.72-1                             
+[36] fastcluster_1.2.3                        
+[37] dynamicTreeCut_1.63-1                    
+[38] pathview_1.38.0                          
+[39] gage_2.48.0                              
+[40] dplyr_1.1.4                              
+[41] topGO_2.50.0                             
+[42] SparseM_1.81                             
+[43] graph_1.76.0                             
+[44] GO.db_3.16.0                             
+[45] RColorBrewer_1.1-3                       
+[46] genefilter_1.80.3                        
+[47] pheatmap_1.0.12                          
+[48] ggsci_3.0.0                              
+[49] tximport_1.26.1                          
+[50] org.Mm.eg.db_3.16.0                      
+[51] AnnotationDbi_1.60.2                     
+[52] DOSE_3.24.2                              
+[53] ReactomePA_1.42.0                        
+[54] biomaRt_2.54.1                           
+[55] clusterProfiler_4.6.2                    
+[56] ggplot2_3.5.0.9000                       
+[57] DESeq2_1.38.3                            
+[58] SummarizedExperiment_1.28.0              
+[59] Biobase_2.58.0                           
+[60] MatrixGenerics_1.10.0                    
+[61] matrixStats_1.0.0                        
+[62] GenomicRanges_1.50.2                     
+[63] GenomeInfoDb_1.34.9                      
+[64] IRanges_2.32.0                           
+[65] S4Vectors_0.36.2                         
+[66] BiocGenerics_0.44.0                      
+[67] gprofiler2_0.2.2                         
+[68] workflowr_1.7.0                          
+
+loaded via a namespace (and not attached):
+  [1] Hmisc_5.1-0              svglite_2.1.1            ps_1.7.5                
+  [4] Rsamtools_2.14.0         foreach_1.5.2            rprojroot_2.0.3         
+  [7] crayon_1.5.2             MASS_7.3-60              nlme_3.1-162            
+ [10] backports_1.4.1          impute_1.72.3            rlang_1.1.3             
+ [13] XVector_0.38.0           HDO.db_0.99.1            callr_3.7.3             
+ [16] filelock_1.0.2           rjson_0.2.21             bit64_4.0.5             
+ [19] glue_1.7.0               rngtools_1.5.2           parallel_4.2.1          
+ [22] processx_3.8.2           DEFormats_1.26.0         tidyselect_1.2.1        
+ [25] XML_3.99-0.14            GenomicAlignments_1.34.1 xtable_1.8-4            
+ [28] magrittr_2.0.3           evaluate_0.21            bibtex_0.5.1            
+ [31] cli_3.6.2                zlibbioc_1.44.0          doRNG_1.8.6             
+ [34] rstudioapi_0.14          whisker_0.4.1            bslib_0.5.0             
+ [37] rpart_4.1.19             derfinderHelper_1.32.0   fastmatch_1.1-3         
+ [40] BiocStyle_2.26.0         lambda.r_1.2.4           treeio_1.22.0           
+ [43] xfun_0.39                gson_0.1.0               cluster_2.1.4           
+ [46] caTools_1.18.2           tidygraph_1.2.3          KEGGREST_1.38.0         
+ [49] ggrepel_0.9.3            ape_5.7-1                Biostrings_2.66.0       
+ [52] png_0.1-8                reshape_0.8.9            withr_3.0.0             
+ [55] bitops_1.0-7             ggforce_0.4.1            RBGL_1.74.0             
+ [58] plyr_1.8.8               coda_0.19-4              bumphunter_1.40.0       
+ [61] pillar_1.9.0             cachem_1.0.8             fs_1.6.2                
+ [64] graphite_1.44.0          vctrs_0.6.5              generics_0.1.3          
+ [67] tools_4.2.1              foreign_0.8-84           munsell_0.5.1           
+ [70] tweenr_2.0.2             fgsea_1.24.0             DelayedArray_0.24.0     
+ [73] fastmap_1.1.1            compiler_4.2.1           abind_1.4-5             
+ [76] httpuv_1.6.11            rtracklayer_1.58.0       plotly_4.10.2           
+ [79] GenomeInfoDbData_1.2.9   gridExtra_2.3            lattice_0.21-8          
+ [82] utf8_1.2.4               later_1.3.1              BiocFileCache_2.6.1     
+ [85] jsonlite_1.8.7           GGally_2.1.2             scales_1.3.0            
+ [88] tidytree_0.4.2           carData_3.0-5            lazyeval_0.2.2          
+ [91] promises_1.2.0.1         car_3.1-2                doParallel_1.0.17       
+ [94] checkmate_2.2.0          rmarkdown_2.23           cowplot_1.1.1           
+ [97] webshot_0.5.5            downloader_0.4           BSgenome_1.66.3         
+[100] igraph_1.5.0             survival_3.5-5           numDeriv_2016.8-1.1     
+[103] yaml_2.3.7               systemfonts_1.0.4        htmltools_0.5.5         
+[106] memoise_2.0.1            VariantAnnotation_1.44.1 BiocIO_1.8.0            
+[109] locfit_1.5-9.8           graphlayouts_1.0.0       viridisLite_0.4.2       
+[112] digest_0.6.32            rappdirs_0.3.3           knitrBootstrap_1.0.2    
+[115] futile.options_1.0.1     emdbook_1.3.13           RSQLite_2.3.1           
+[118] yulab.utils_0.0.6        derfinder_1.32.0         data.table_1.14.8       
+[121] blob_1.2.4               preprocessCore_1.60.2    labeling_0.4.3          
+[124] splines_4.2.1            Formula_1.2-5            RCurl_1.98-1.12         
+[127] broom_1.0.5              hms_1.1.3                colorspace_2.1-0        
+[130] base64enc_0.1-3          BiocManager_1.30.21      aplot_0.1.10            
+[133] nnet_7.3-19              sass_0.4.6               Rcpp_1.0.10             
+[136] mvtnorm_1.2-2            fansi_1.0.6              tzdb_0.4.0              
+[139] R6_2.5.1                 lifecycle_1.0.4          formatR_1.14            
+[142] curl_5.0.1               ggsignif_0.6.4           jquerylib_0.1.4         
+[145] Matrix_1.5-4.1           qvalue_2.30.0            org.Hs.eg.db_3.16.0     
+[148] iterators_1.0.14         RefManageR_1.4.0         htmlwidgets_1.6.2       
+[151] markdown_1.7             polyclip_1.10-4          shadowtext_0.1.2        
+[154] timechange_0.2.0         gridGraphics_0.5-1       reactome.db_1.82.0      
+[157] rvest_1.0.3              htmlTable_2.4.1          patchwork_1.2.0.9000    
+[160] bdsmatrix_1.3-6          codetools_0.2-19         gtools_3.9.4            
+[163] getPass_0.2-2            prettyunits_1.1.1        dbplyr_2.3.2            
+[166] gtable_0.3.5             DBI_1.1.3                git2r_0.32.0            
+[169] ggfun_0.1.1              httr_1.4.6               highr_0.10              
+[172] KernSmooth_2.23-21       stringi_1.8.4            progress_1.2.2          
+[175] reshape2_1.4.4           farver_2.1.2             annotate_1.76.0         
+[178] viridis_0.6.3            Rgraphviz_2.42.0         ggtree_3.6.2            
+[181] xml2_1.3.4               bbmle_1.0.25             restfulr_0.0.15         
+[184] geneplotter_1.76.0       ggplotify_0.1.1          bit_4.0.5               
+[187] scatterpie_0.2.1         ggraph_2.1.0             pkgconfig_2.0.3         
+[190] rstatix_0.7.2            GenomicFiles_1.34.0     </code></pre>
+</div>
+</div>
+</div>
+</div>
 
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
