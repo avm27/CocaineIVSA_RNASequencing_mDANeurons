@@ -71,13 +71,13 @@ register(MulticoreParam(12))
 
 <center>
 
-<font size="18"> **Microglia contribute to methamphetamine reinforcement and reflect persistent transcriptional and morphological adaptations to the drug** </font>
+<font size="18"> **Cocaine craving drives repressive epigenetic differential gene expression in ventral tegmental area dopamine neurons** </font>
 
 </center>
 
 <center>
 
-Samara J. Vilca1,2†, Alexander V. Margetts1-3†, Isabella Fleites1-3, Claes R. Wahlestedt1-3
+Tate A. Pollock1,2, Alexander V. Margetts1-3, Samara J. Vilca1-2
 & Luis M. Tuesta1-3*
 
 </center>
@@ -88,16 +88,23 @@ Samara J. Vilca1,2†, Alexander V. Margetts1-3†, Isabella Fleites1-3, Claes R
 2 Center for Therapeutic Innovation
 3 Sylvester Comprehensive Cancer Center
   University of Miami Miller School of Medicine, Miami, FL 33136
-† Denotes equal contribution
 * Corresponding author (ltuesta@miami.edu)
 
 </center>
 
-# Abstract
+<font size="24"> **Abstract** </font>
 
-Abstract
-Methamphetamine use disorder (MUD) is a chronic, relapsing disease that is characterized by repeated drug use despite negative consequences for which there are currently no FDA approved cessation therapeutics. Repeated methamphetamine (METH) use induces long-term gene expression changes in brain regions associated with reward processing and drug-seeking behavior, and recent evidence suggests that methamphetamine-induced neuroinflammation may also shape behavioral and molecular responses to the drug. Microglia, the resident immune cells in the brain, are principal drivers of neuroinflammatory responses and contribute to the pathophysiology of substance use disorders. Here, we investigated transcriptional and morphological changes in striatal microglia in response to methamphetamine-taking and during methamphetamine abstinence, as well as their functional contribution to drug-taking behavior. We show that methamphetamine self-administration induces transcriptional changes related to protein folding, mRNA processing, immune signaling, and neurotransmission in striatal microglia. Importantly, many of these transcriptional changes persist through abstinence, a finding supported by morphological analysis. Functionally, we report that microglial ablation increases methamphetamine-taking, possibly involving neuroimmune and neurotransmitter regulation. In contrast, microglial depletion did not alter methamphetamine-seeking behavior following 21 days of abstinence, highlighting the complexity of drug-seeking behaviors. Taken together, these results suggest that methamphetamine induces both short and long-term changes in striatal microglia that contribute to altered drug-taking behavior and may be leveraged for preclinical development of methamphetamine cessation therapeutics. 
+Dopamine (DA) signaling plays an essential role in reward valence attribution and in encoding the reinforcing properties of natural and  artificial rewards. The adaptive responses from midbrain dopamine neurons to artificial rewards such as drugs of abuse are therefore important for understanding the development of substance use disorders. Drug-induced changes in gene expression are one such adaptation that can determine the activity of dopamine signaling in projection regions of the brain reward system. One of the major challenges to obtaining this understanding is the inherent cellular heterogeneity in the brain, where each neuron population can be defined by a distinct transcriptional profile. To bridge this gap, we have adapted a virus-based method for labeling and capture of dopamine nuclei, coupled with nuclear RNA-sequencing and bioinformatics analyses, to study the transcriptional adaptations, specifically, of dopamine neurons in the ventral tegmental area (VTA) during cocaine taking and cocaine craving using a mouse model of cocaine intravenous self-administration (IVSA). Our results show significant changes in gene expression across non-drug operant training, cocaine taking, and cocaine craving, highlighted by an enrichment in expression of repressive epigenetic modifying enzymes during cocaine craving. Immunohistochemical validation further revealed an increase of H3K9me3 deposition in DA neurons during cocaine craving. These results demonstrate that cocaine-induced transcriptional adaptations in dopamine neurons vary by phase of self-administration and suggest that such an approach may be useful in identifying relevant phase-specific molecular targets to alter the behavioral course of substance use disorders.
 
+<center>
+
+<center>
+
+![](assets/graphical-abstract.png)
+
+<center>
+
+<center>
 
 # DESeq2 Analysis
 
@@ -833,7 +840,7 @@ pheatmap::pheatmap(
   cutree_cols = 3,
   treeheight_row = 10,
   treeheight_col = 10,
-  filename = "plots/CIVSA_Heatmap_DEGs_Final_Condensed_Unsupervised.pdf",
+  #filename = "plots/CIVSA_Heatmap_DEGs_Final_Condensed_Unsupervised.pdf",
   legend_labels = c("FoodTrained", "Maintenance", "Craving"),
 )
 ```
@@ -864,7 +871,7 @@ pheatmap::pheatmap(
   gaps_col = c(3, 6),
   treeheight_row = 10,
   treeheight_col = 10,
-  filename = "plots/CIVSA_Heatmap_DEGs_Final_Condensed_Supervised.pdf",
+  #filename = "plots/CIVSA_Heatmap_DEGs_Final_Condensed_Supervised.pdf",
   legend_labels = c("FoodTrained", "Maintenance", "Craving"),
 )
 
@@ -1212,4 +1219,84 @@ plotc <- plot_ly(data = intvol3, x = intvol3$lfc, y = -log10(intvol3$pval), text
 plotc
 
 
+```
+
+
+
+# Pathway Analysis
+
+## Pathway Analysis GO {.tabset}
+
+First, the background for the GO universe must be set. In order to do so we will subset the first results file "res" for any genes that map to entrez IDs and then we only take the unique ones. This leaves us with ~31,000 genes for the remaining background which we list as our midbrain dopamine neuronal expressed genes.
+
+```{r GO Analyses -- Setting up Background, echo=FALSE, message=FALSE, warning=FALSE}
+# Generate Background for KEGG/GO
+
+background_mm10 <- subset(res, is.na(entrez) == FALSE)
+gene_matrix_background <- unique(sort(background_mm10$entrez))
+
+```
+
+Pathway analysis is conducted using enrichGo and enrichKEGG based on a p-value of 0.05 and a q-value of 0.10 and including all significantly differentially expressed genes.
+
+```{r GO Analyses 1, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Remove any genes that have greater than 1.5 LFC Standard Error
+results_sig_entrez <- subset(results_sig, lfcSE <= 1.5)
+results_sig_entrez2 <- subset(results_sig2, lfcSE <= 1.5)
+results_sig_entrez3 <- subset(results_sig3, lfcSE <= 1.5)
+
+# Remove any genes that have greater than adj.pvalue 0.05
+results_sig_entrez <- subset(results_sig_entrez, padj <= 0.05)
+results_sig_entrez2 <- subset(results_sig_entrez2, padj <= 0.05)
+results_sig_entrez3 <- subset(results_sig_entrez3, padj <= 0.05)
+
+# Remove any genes that do not have any entrez identifiers
+results_sig_entrez <- subset(results_sig_entrez, is.na(entrez) == FALSE)
+results_sig_entrez2 <- subset(results_sig_entrez2, is.na(entrez) == FALSE)
+results_sig_entrez3 <- subset(results_sig_entrez3, is.na(entrez) == FALSE)
+
+# Create a matrix of gene log2 fold changes
+gene_matrix <- results_sig_entrez$log2FoldChange
+gene_matrix2 <- results_sig_entrez2$log2FoldChange
+gene_matrix3 <- results_sig_entrez3$log2FoldChange
+
+# Add the entrezID's as names for each logFC entry
+names(gene_matrix) <- results_sig_entrez$entrez
+names(gene_matrix2) <- results_sig_entrez2$entrez
+names(gene_matrix3) <- results_sig_entrez3$entrez
+
+
+go <- enrichGO(
+  gene = names(gene_matrix),
+  OrgDb = "org.Mm.eg.db",
+  readable = T,
+  universe = gene_matrix_background,
+  ont = "ALL",
+  pAdjustMethod = "fdr",
+  pvalueCutoff = 0.05,
+  qvalueCutoff = 0.10
+)
+
+go2 <- enrichGO(
+  gene = names(gene_matrix2),
+  OrgDb = "org.Mm.eg.db",
+  readable = T,
+  universe = gene_matrix_background,
+  ont = "ALL",
+  pAdjustMethod = "fdr",
+  pvalueCutoff = 0.05,
+  qvalueCutoff = 0.10
+)
+
+go3 <- enrichGO(
+  gene = names(gene_matrix3),
+  OrgDb = "org.Mm.eg.db",
+  readable = T,
+  universe = gene_matrix_background,
+  ont = "ALL",
+  pAdjustMethod = "fdr",
+  pvalueCutoff = 0.05,
+  qvalueCutoff = 0.10
+)
 ```
