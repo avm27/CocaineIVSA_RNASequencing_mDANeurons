@@ -132,14 +132,10 @@ Running DeSeq2 analysis with factor levels of FoodTrained vs Maintenance, Cravin
 ```{r DESeq2 Analysis, echo=FALSE, message=FALSE, warning=FALSE}
 
 dds <- DESeqDataSetFromMatrix(countData = countData, colData = colData, design = ~condition)
-dds2 <- DESeqDataSetFromMatrix(countData = countData, colData = colData, design = ~condition)
 
 ## Relevel Condition to Analyze Each group against Another
 dds$condition <- relevel(dds$condition, ref = "FoodTrained")
 dds <- DESeq(dds)
-dds2$condition <- relevel(dds2$condition, ref = "Maintenance")
-dds2 <- DESeq(dds2)
-
 ```
 
 # Plot Estimates and Gather Results
@@ -151,7 +147,7 @@ These results include overview for each result file and dispersion estimates bas
 ### Craving vs FoodTraining
 ```{r Craving vs FoodTrained Results, echo=FALSE, results='asis'}
 ## Look at Results
-res <- results(dds, name = "condition_Craving_vs_FoodTrained")
+res <- results(dds, contrast = c("condition", "Craving", "FoodTrained"))
 
 kable(head(res, 20), caption = "Craving vs FoodTrained CIVSA Results Overview", format = "html", align = "l", booktabs=TRUE) %>%
   kable_styling(html_font = "Arial", font_size = 10, bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
@@ -162,7 +158,7 @@ summary(res)
 
 ### Maintenance vs FoodTraining
 ```{r Maintenance vs FoodTrained Results, echo=FALSE, results='asis'}
-res2 <- results(dds, name = "condition_Maintenance_vs_FoodTrained")
+res2 <- results(dds, contrast = c("condition", "Maintenance", "FoodTrained"))
 
 kable(head(res2, 20), caption = "Craving vs FoodTrained CIVSA Results Overview", format = "html", align = "l", booktabs=TRUE) %>%
   kable_styling(html_font = "Arial", font_size = 10, bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
@@ -173,7 +169,7 @@ summary(res2)
 
 ### Craving vs Maintenance
 ```{r Craving vs Maintenance Results, echo=FALSE, results='asis'}
-res3 <- results(dds2, name = "condition_Craving_vs_Maintenance")
+res3 <- results(dds, contrast = c("condition", "Craving", "Maintenance"))
 
 kable(head(res3, 20), caption = "Craving vs Maintenance CIVSA Results Overview", format = "html", align = "l", booktabs=TRUE) %>%
   kable_styling(html_font = "Arial", font_size = 10, bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
@@ -191,24 +187,17 @@ This subsection is for annotation the results files to include all necessary inf
 deseqrownames <- data.frame(rownames(dds))
 newrownames <- deseqrownames %>% separate(rownames.dds., c("id", "symbol"),sep ="([|])")
 
-deseqrownames2 <- data.frame(rownames(dds2))
-newrownames2 <- deseqrownames2 %>% separate(rownames.dds2., c("id", "symbol"),sep ="([|])")
-
 all(newrownames$id == newrownames$symbol)
-all(newrownames2$id == newrownames2$symbol)
 sum(is.na(newrownames$symbol))
 sum(duplicated(newrownames$symbol))
-sum(is.na(newrownames2$symbol))
-sum(duplicated(newrownames2$symbol))
 
 mcols(dds) <- cbind(mcols(dds), newrownames)
-mcols(dds2) <- cbind(mcols(dds2), newrownames2)
 
 # Add gene symbol to results
 
 res$symbol <- mcols(dds)$symbol
 res2$symbol <- mcols(dds)$symbol
-res3$symbol <- mcols(dds2)$symbol
+res3$symbol <- mcols(dds)$symbol
 
 ## Add Annotations
 
@@ -296,6 +285,10 @@ After annotation I subset the results to only view the significantly differentia
 results_sig <- subset(res, padj < 0.05)
 results_sig2 <- subset(res2, padj < 0.05)
 results_sig3 <- subset(res3, padj < 0.05)
+
+summary(results_sig)
+summary(results_sig2)
+summary(results_sig3)
 ```
 
 ### Craving vs FoodTrained
@@ -331,13 +324,13 @@ write_csv((as.data.frame(results_sig3)), "output/Sig_Res_Craving_vs_Maintenance.
 
 ## Visualize Shrinkage Estimations
 
-Following subsetting, I want to see how the data looks based on effect size so I have run a shrinkage model using the "apeglm" method which normalizes counts based on effect size without major changes to data structure. I have included non-shrunk models as well for comparison.
+Following subsetting, I want to see how the data looks based on effect size so I have run a shrinkage model using the "normal" method which normalizes counts based on effect size without major changes to data structure. I have included non-shrunk models as well for comparison.
 
 ```{r Shrinkage Estimation, echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
 ## Log Fold Change Shrinkage Estimation
-resLFC <- lfcShrink(dds, coef = "condition_Craving_vs_FoodTrained", type = "apeglm")
-resLFC2 <- lfcShrink(dds, coef = "condition_Maintenance_vs_FoodTrained", type = "apeglm")
-resLFC3 <- lfcShrink(dds2, coef = "condition_Craving_vs_Maintenance", type = "apeglm")
+resLFC <- lfcShrink(dds, coef = "condition_Craving_vs_FoodTrained", type = "normal")
+resLFC2 <- lfcShrink(dds, coef = "condition_Maintenance_vs_FoodTrained", type = "normal")
+resLFC3 <- lfcShrink(dds, contrast = c("condition", "Craving", "Maintenance"), type = "normal")
 
 ```
 
@@ -387,7 +380,7 @@ DESeq2::plotMA(resLFC3, alpha = 0.05, main = "Shrunken LF2C Craving vs Maintenan
 We can generate a matrix to identify where our differentially expressed genes lie between each group based on an alpha value of 0.05. 
 
 ```{r Matrix of Differentially Expressed genes across groups, echo=TRUE, message=FALSE, warning=FALSE}
-## Matrix Visualizaattion
+## Matrix Visualizattion
 x <- vsDEGMatrix(
   data = dds, padj = 0.05, d.factor = "condition",
   type = "deseq", title = TRUE, legend = TRUE, grid = TRUE
@@ -608,6 +601,30 @@ a
 ```
 
 
+### Ash1l
+
+```{r Selected Genes7, echo=TRUE, message=FALSE, warning=FALSE}
+#### Ash1l
+
+d2 <- plotCounts(dds,
+  gene = "Ash1l|Ash1l", intgroup = "condition",
+  returnData = TRUE
+)
+
+a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
+  geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
+  scale_color_manual(values=c("#0000FF", "#FF8000", "#AD07E3")) +
+  theme_bw() +
+  xlab("Condition")+
+  ylab("Normalized Counts")+
+  ggtitle(
+    label = "Ash1l Expression",
+    subtitle = "Normalized Gene Expression"
+  )
+
+a
+```
+
 
 ## Principal Components Analysis (PCA)
 
@@ -679,11 +696,11 @@ venn.plot.up <- venn.diagram(
 
 # Save Venn Diagram
 #pdf("plots/CIVSA_venn_diagram_Up.pdf")
-grid.draw(venn.plot.up)
+#grid.draw(venn.plot.up)
 #dev.off()
 
 # Display Venn Diagram in RStudio
-#grid.draw(venn.plot.up)
+grid.draw(venn.plot.up)
 
 ```
 
