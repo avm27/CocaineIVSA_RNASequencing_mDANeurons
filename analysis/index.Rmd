@@ -71,14 +71,13 @@ register(MulticoreParam(12))
 
 <center>
 
-<font size="18"> **Cocaine craving drives repressive epigenetic differential gene expression in ventral tegmental area dopamine neurons** </font>
+<font size="24"> **Cocaine craving drives repressive epigenetic differential gene expression in ventral tegmental area dopamine neurons** </font>
 
 </center>
 
 <center>
 
-Tate A. Pollock1,2, Alexander V. Margetts1-3, Samara J. Vilca1-2
-& Luis M. Tuesta1-3*
+Tate A. Pollock1,2, Alexander V. Margetts1-3, Samara J. Vilca1-2 & Luis M. Tuesta1-3*
 
 </center>
 
@@ -92,7 +91,7 @@ Tate A. Pollock1,2, Alexander V. Margetts1-3, Samara J. Vilca1-2
 
 </center>
 
-<font size="24"> **Abstract** </font>
+<font size="20"> **Abstract** </font>
 
 Dopamine (DA) signaling plays an essential role in reward valence attribution and in encoding the reinforcing properties of natural and  artificial rewards. The adaptive responses from midbrain dopamine neurons to artificial rewards such as drugs of abuse are therefore important for understanding the development of substance use disorders. Drug-induced changes in gene expression are one such adaptation that can determine the activity of dopamine signaling in projection regions of the brain reward system. One of the major challenges to obtaining this understanding is the inherent cellular heterogeneity in the brain, where each neuron population can be defined by a distinct transcriptional profile. To bridge this gap, we have adapted a virus-based method for labeling and capture of dopamine nuclei, coupled with nuclear RNA-sequencing and bioinformatics analyses, to study the transcriptional adaptations, specifically, of dopamine neurons in the ventral tegmental area (VTA) during cocaine taking and cocaine craving using a mouse model of cocaine intravenous self-administration (IVSA). Our results show significant changes in gene expression across non-drug operant training, cocaine taking, and cocaine craving, highlighted by an enrichment in expression of repressive epigenetic modifying enzymes during cocaine craving. Immunohistochemical validation further revealed an increase of H3K9me3 deposition in DA neurons during cocaine craving. These results demonstrate that cocaine-induced transcriptional adaptations in dopamine neurons vary by phase of self-administration and suggest that such an approach may be useful in identifying relevant phase-specific molecular targets to alter the behavioral course of substance use disorders.
 
@@ -104,9 +103,7 @@ Dopamine (DA) signaling plays an essential role in reward valence attribution an
 
 <center>
 
-<center>
-
-# DESeq2 Analysis
+<font size="20"> **Differential Gene Expression Analysis with DESeq2** </font>
 
 ## Setup
 
@@ -1299,4 +1296,159 @@ go3 <- enrichGO(
   pvalueCutoff = 0.05,
   qvalueCutoff = 0.10
 )
+```
+
+```{r Merging GO For Barplots, eval=FALSE, include=FALSE}
+## Merge GO Pathways and Write to CSV
+
+CRV_vs_FT_GO <- as.data.frame(head(go,10))
+MN_vs_FT_GO <- as.data.frame(go2)
+CRV_vs_MN_GO <- as.data.frame(go3)
+
+CRV_vs_FT_GO$Comparison <- "Craving_vs_FoodTrained"
+MN_vs_FT_GO$Comparison <- "Maintenance_vs_FoodTrained"
+CRV_vs_MN_GO$Comparison <- "Craving_vs_Maintenance"
+
+
+GoMerged_1 <- rbind(CRV_vs_FT_GO, MN_vs_FT_GO)
+GoMerged_Final <- rbind(GoMerged_1, CRV_vs_MN_GO)
+
+CRV_vs_FT_GO_reduced <- as.data.frame(head(go,10))
+MN_vs_FT_GO_reduced <- as.data.frame(head(go2,10))
+CRV_vs_MN_GO_reduced <- as.data.frame(head(go3,10))
+
+CRV_vs_FT_GO_reduced$Comparison <- "Craving_vs_FoodTrained"
+MN_vs_FT_GO_reduced$Comparison <- "Maintenance_vs_FoodTrained"
+CRV_vs_MN_GO_reduced$Comparison <- "Craving_vs_Maintenance"
+
+
+GoMerged_1_reduced <- rbind(CRV_vs_FT_GO_reduced, MN_vs_FT_GO_reduced)
+GoMerged_Final_reduced <- rbind(GoMerged_1_reduced, CRV_vs_MN_GO_reduced)
+```
+
+```{r Writing Tables GO Results, eval=FALSE, include=FALSE}
+write.table(
+  x = as.data.frame(GoMerged_Final),
+  file = "output/GO_all_Combined_Comparisons.txt",
+  sep = "\t",
+  quote = F,
+  col.names = NA
+)
+
+write.table(
+  x = as.data.frame(GoMerged_Final_reduced),
+  file = "output/GO_all_Combined_Comparisons_Reduced.txt",
+  sep = "\t",
+  quote = F,
+  col.names = NA
+)
+
+
+write.table(
+  x = as.data.frame(gene_matrix_background),
+  file = "output/Gene_Matrix_EntrezIDs_BACKGROUND.txt",
+  sep = "\t",
+  quote = F,
+  col.names = NA
+)
+
+
+write.table(
+  x = as.data.frame(names(gene_matrix)),
+  file = "output/Gene_Matrix_EntrezIDs_CRVvsFT.txt",
+  sep = "\t",
+  quote = F,
+  col.names = NA
+)
+write.table(
+  x = as.data.frame(names(gene_matrix2)),
+  file = "output/Gene_Matrix_EntrezIDs_MNvsFT.txt",
+  sep = "\t",
+  quote = F,
+  col.names = NA
+)
+write.table(
+  x = as.data.frame(names(gene_matrix3)),
+  file = "output/Gene_Matrix_EntrezIDs_CRVvsMN.txt",
+  sep = "\t",
+  quote = F,
+  col.names = NA
+)
+```
+
+
+### Craving vs FoodTrained
+
+```{r Craving vs FoodTrained GO}
+kable(head(go, 10), caption = "Top 10 GO Pathways for Craving vs FoodTrained", format = "html", align = "l", booktabs = TRUE) %>%
+  kable_styling(html_font = "Arial", font_size = 10, bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  scroll_box(width = "1000px", height = "500px")
+```
+
+
+### Maintenance vs FoodTrained 
+```{r Maintenance vs FoodTrained GO}
+kable(head(go2, 10), caption = "Top 10 GO Pathways for Maintenance vs FoodTrained", format = "html", align = "l", booktabs = TRUE) %>%
+  kable_styling(html_font = "Arial", font_size = 10, bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  scroll_box(width = "1000px", height = "500px")
+```
+
+
+### Craving vs Maintenance
+
+```{r Craving vs Mainteance GO}
+kable(head(go3, 10), caption = "Top 10 GO Pathways for Craving vs Maintenance", format = "html", align = "l", booktabs = TRUE) %>%
+  kable_styling(html_font = "Arial", font_size = 10, bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  scroll_box(width = "1000px", height = "500px")
+```
+
+
+# GO Pathways Visualization {.tabset}
+## GO DotPlot
+```{r Combined GO DotPlots, echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(stringr)
+
+data <- read.delim("output/GO_all_Combined_Comparisons_Reduced.txt", stringsAsFactors = FALSE)
+
+# Turn your 'treatment' column into a character vector
+data$Comparison <- as.character(data$Comparison)
+# Then turn it back into a factor with the levels in the correct order
+data$Comparison <- factor(data$Comparison, levels = c("Craving_vs_FoodTrained", "Maintenance_vs_FoodTrained", "Craving_vs_Maintenance"))
+
+data$Description_title_case <- str_to_title(data$Description)
+data$GOPathways <- str_to_title(data$Description_title_case)
+data$GOPathways <- str_wrap(data$GOPathways, width = 10)
+
+
+y.axis.text <- element_text(family = "NimbusSanCond", face = "bold", color = "black", size = 6)
+x.axis.text <- element_text(family = "NimbusSanCond", face = "bold", color = "black", size = 7)
+plot.title.text <- element_text(family = "NimbusSanCond", face = "bold", color = "black", size = 7, hjust = 0.5)
+legend.text <- element_text(family = "NimbusSanCond", face = "bold", color = "black", size = 8)
+legend.title.text <- element_text(family = "NimbusSanCond", face = "bold", color = "black", size = 8)
+axis.title <- element_text(family = "NimbusSanCond", face = "bold", color = "black", size = 9)
+
+
+S1 <- ggplot(data, aes(x = Comparison, y = Description, size = Count, color = qvalue, group = Comparison)) +
+  geom_point(alpha = 0.8) +
+  theme_bw() +
+  theme(
+    axis.text.y = y.axis.text,
+    axis.text.x = x.axis.text,
+    axis.title = axis.title,
+    plot.title = plot.title.text,
+    legend.text = legend.text,
+    legend.title = legend.title.text,
+    legend.key.size = unit(0.5, "cm"), # change legend key size
+    legend.key.height = unit(0.5, "cm"), # change legend key height
+    legend.key.width = unit(0.5, "cm")
+  ) + # change legend key width
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
+  scale_y_discrete(labels = function(x) str_wrap(x, width = 50)) +
+  ggtitle("Altered Pathways in mDA Neurons Through Cocaine Craving")
+
+S2 <- S1 + scale_color_gradient(low = "red2", high = "mediumblue", space = "Lab") + scale_size(range = c(1, 5))
+#pdf("plots/CIVSA_GO_Combined.pdf")
+S2
+#dev.off()
 ```
