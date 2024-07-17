@@ -805,8 +805,7 @@ annot_col <- samples %>%
   as.data.frame()
 
 ann_colors = list(
-  condition = as.factor(c(FoodTrained = "#0000FF", Maintenance = "#AD07E3", Craving = "#FF8000")),
-  Group = as.factor(c(FoodTrained = "#0000FF", Maintenance = "#AD07E3", Craving = "#FF8000")))
+  condition = c(FoodTrained = "#0000FF", Maintenance = "#AD07E3", Craving = "#FF8000"))
 
 ```
 
@@ -819,12 +818,11 @@ pheatmap::pheatmap(
   scale = "row",
   annotation_colors = ann_colors,
   annotation_col = annot_col,
+  annotation_legend = T,
   fontsize = 10, 
   show_colnames = T,
   cluster_rows = T,
   cluster_cols = T,
-  annotation_legend = T,
-  legend = T,
   show_rownames = F,
   clustering_distance_rows = "correlation",
   clustering_method = "ward.D",
@@ -835,7 +833,8 @@ pheatmap::pheatmap(
   cutree_cols = 3,
   treeheight_row = 10,
   treeheight_col = 10,
-  #legend_labels = c("FoodTrained", "Maintenance", "Craving")
+  filename = "plots/CIVSA_Heatmap_DEGs_Final_Condensed_Unsupervised.pdf",
+  legend_labels = c("FoodTrained", "Maintenance", "Craving"),
 )
 ```
 
@@ -865,7 +864,8 @@ pheatmap::pheatmap(
   gaps_col = c(3, 6),
   treeheight_row = 10,
   treeheight_col = 10,
-  #legend_labels = c("FoodTrained", "Maintenance", "Craving"),
+  filename = "plots/CIVSA_Heatmap_DEGs_Final_Condensed_Supervised.pdf",
+  legend_labels = c("FoodTrained", "Maintenance", "Craving"),
 )
 
 ```
