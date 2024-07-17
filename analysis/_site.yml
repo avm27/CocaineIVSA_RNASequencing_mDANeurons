@@ -1,17 +1,23 @@
-name: "CocaineIVSA_RNASequencing_mDANeurons"
+name: CocaineIVSA_RNASequencing_mDANeurons
 output_dir: ../docs
 navbar:
-  title: "CocaineIVSA_RNASequencing_mDANeurons"
+  title: Cocaine IVSA mDA Neurons RNASequencing Analysis
   left:
-  - text: Home
-    href: index.html
-  - text: About
+  - text: Dopamine vs Non-Dopmaine Analysis
+    href: DAvsnDA.html
+  - text: About Our Lab
     href: about.html
   - text: License
     href: license.html
+  right:
+  - icon: fab fa-github
+    text: Source code
+    href: https://github.com/avm27/CocaineIVSA_RNASequencing_mDANeurons
 output:
   workflowr::wflow_html:
     toc: yes
     toc_float: yes
-    theme: cosmo
-    highlight: textmate
+    theme: united
+    highlight: tango
+    code_folding: hide
+    number_sections: yes
