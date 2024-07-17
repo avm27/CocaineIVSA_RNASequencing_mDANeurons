@@ -2,10 +2,936 @@
 title: "Home"
 site: workflowr::wflow_site
 output:
+  html_document:
+    toc: no
+    df_print: paged
   workflowr::wflow_html:
-    toc: false
+    toc: no
 editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(gprofiler2)
+library(DESeq2)
+library(ggplot2)
+library(clusterProfiler)
+library(biomaRt)
+library(ReactomePA)
+library(DOSE)
+options(connectionObserver = NULL)
+library(org.Mm.eg.db)
+library(tximport)
+library(ggsci)
+library(pheatmap)
+library(genefilter)
+library(RColorBrewer)
+library(GO.db)
+library(topGO)
+library(dplyr)
+library(gage)
+library(pathview)
+library(WGCNA)
+library(tidyr)
+library(enrichplot)
+library(ggnewscale)
+library(SPIA)
+library(ggpubr)
+library(apeglm)
+library(GOSemSim)
+library(edgeR)
+library(tweeDEseqCountData)
+library(statmod)
+library(org.Mm.eg.db)
+library(tidyverse)
+library(pheatmap)
+library(gplots)
+library(Mus.musculus)
+library(Glimma)
+library(RColorBrewer)
+library(clusterProfiler)
+library(ReactomePA)
+library(enrichplot)
+library(ggnewscale)
+library(knitr)
+library(tables)
+library(vidger)
+library(kableExtra)
+library(regionReport)
+library(dplyr)
+library(tidyr)
+library(VennDiagram)
+library(conflicted)
+library("BiocParallel")
+register(MulticoreParam(12))
+```
+
+
+<center>
+
+<font size="18"> **Microglia contribute to methamphetamine reinforcement and reflect persistent transcriptional and morphological adaptations to the drug** </font>
+
+</center>
+
+<center>
+
+Samara J. Vilca1,2†, Alexander V. Margetts1-3†, Isabella Fleites1-3, Claes R. Wahlestedt1-3
+& Luis M. Tuesta1-3*
+
+</center>
+
+<center>
+
+1 Department of Psychiatry & Behavioral Sciences
+2 Center for Therapeutic Innovation
+3 Sylvester Comprehensive Cancer Center
+  University of Miami Miller School of Medicine, Miami, FL 33136
+† Denotes equal contribution
+* Corresponding author (ltuesta@miami.edu)
+
+</center>
+
+# Abstract
+
+Abstract
+Methamphetamine use disorder (MUD) is a chronic, relapsing disease that is characterized by repeated drug use despite negative consequences for which there are currently no FDA approved cessation therapeutics. Repeated methamphetamine (METH) use induces long-term gene expression changes in brain regions associated with reward processing and drug-seeking behavior, and recent evidence suggests that methamphetamine-induced neuroinflammation may also shape behavioral and molecular responses to the drug. Microglia, the resident immune cells in the brain, are principal drivers of neuroinflammatory responses and contribute to the pathophysiology of substance use disorders. Here, we investigated transcriptional and morphological changes in striatal microglia in response to methamphetamine-taking and during methamphetamine abstinence, as well as their functional contribution to drug-taking behavior. We show that methamphetamine self-administration induces transcriptional changes related to protein folding, mRNA processing, immune signaling, and neurotransmission in striatal microglia. Importantly, many of these transcriptional changes persist through abstinence, a finding supported by morphological analysis. Functionally, we report that microglial ablation increases methamphetamine-taking, possibly involving neuroimmune and neurotransmitter regulation. In contrast, microglial depletion did not alter methamphetamine-seeking behavior following 21 days of abstinence, highlighting the complexity of drug-seeking behaviors. Taken together, these results suggest that methamphetamine induces both short and long-term changes in striatal microglia that contribute to altered drug-taking behavior and may be leveraged for preclinical development of methamphetamine cessation therapeutics. 
+
+
+# DESeq2 Analysis
+
+## Setup
+
+Building DESeq2 input files from gene count matrices output by StringTie following removal of samples that are outliers.
+
+```{r DESeq2 Build -- Final, message=FALSE, warning=FALSE, include=FALSE}
+rm(list = ls(all.names = TRUE))
+gc()
+conflicts_prefer(base::setdiff)
+setwd("/home/avm27/Documents/Raw_Sequencing_Data/CIVSA2/CocaineIVSA_RNASequencing_mDANeurons")
+
+## Run DEeq2 from Matrix output using Stringtie to compare all groups
+
+colData <- read.csv("data/sample_info_CIVSA.csv", sep = ",", row.names = 1)
+colData
+countData <-as.matrix(read.csv("data/gene_count_matrix_CIVSA.csv", row.names = "gene_id"))
+
+
+colnames(countData)
+rownames(colData)
+all(rownames(colData) %in% colnames(countData))
+countData <- countData[, rownames(colData)]
+all(rownames(colData) == colnames(countData))
+```
+
+
+Running DeSeq2 analysis with factor levels of FoodTrained vs Maintenance, Craving vs Maintenance and Craving vs Foodtrained
+
+```{r DESeq2 Analysis, echo=FALSE, message=FALSE, warning=FALSE}
+
+dds <- DESeqDataSetFromMatrix(countData = countData, colData = colData, design = ~condition)
+dds2 <- DESeqDataSetFromMatrix(countData = countData, colData = colData, design = ~condition)
+dds3 <- DESeqDataSetFromMatrix(countData = countData, colData = colData, design = ~condition)
+
+## Relevel Condition to Analyze Each group against Another
+dds$condition <- relevel(dds$condition, ref = "FoodTrained")
+dds <- DESeq(dds)
+dds2$condition <- relevel(dds2$condition, ref = "Maintenance")
+dds2 <- DESeq(dds2)
+dds3$condition <- relevel(dds3$condition, ref = "Craving")
+dds3 <- DESeq(dds3)
+
+```
+
+# Plot Estimates and Gather Results
+
+## Gather Results {.tabset}
+
+These results include overview for each result file and dispersion estimates based on count values.
+
+### Craving vs FoodTraining
+```{r Craving vs FoodTrained Results, echo=FALSE, results='asis'}
+## Look at Results
+res <- results(dds, name = "condition_Craving_vs_FoodTrained")
+
+kable(head(res, 20), caption = "Craving vs FoodTrained CIVSA Results Overview", format = "html", align = "l", booktabs=TRUE) %>%
+  kable_styling(html_font = "Arial", font_size = 10, bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  scroll_box(width = "1000px", height = "500px")
+
+summary(res)
+```
+
+### Maintenance vs FoodTraining
+```{r Maintenance vs FoodTrained Results, echo=FALSE, results='asis'}
+res2 <- results(dds, name = "condition_Maintenance_vs_FoodTrained")
+
+kable(head(res2, 20), caption = "Craving vs FoodTrained CIVSA Results Overview", format = "html", align = "l", booktabs=TRUE) %>%
+  kable_styling(html_font = "Arial", font_size = 10, bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  scroll_box(width = "1000px", height = "500px")
+
+summary(res2)
+```
+
+### Craving vs Maintenance
+```{r Craving vs Maintenance Results, echo=FALSE, results='asis'}
+res3 <- results(dds2, name = "condition_Craving_vs_Maintenance")
+
+kable(head(res3, 20), caption = "Craving vs Maintenance CIVSA Results Overview", format = "html", align = "l", booktabs=TRUE) %>%
+  kable_styling(html_font = "Arial", font_size = 10, bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  scroll_box(width = "1000px", height = "500px")
+
+summary(res3)
+```
+
+## Annotate Results Files and Pull Significant DEGs {.tabset}
+
+This subsection is for annotation the results files to include all necessary information for downstream analyses.
+
+```{r Annotate DDS Matrices, message=FALSE, warning=FALSE, include=FALSE, results='asis'}
+## Make new rownames file and split based on pipe from dds file
+deseqrownames <- data.frame(rownames(dds))
+newrownames <- deseqrownames %>% separate(rownames.dds., c("id", "symbol"),sep ="([|])")
+
+deseqrownames2 <- data.frame(rownames(dds2))
+newrownames2 <- deseqrownames2 %>% separate(rownames.dds2., c("id", "symbol"),sep ="([|])")
+
+deseqrownames3 <- data.frame(rownames(dds3))
+newrownames3 <- deseqrownames3 %>% separate(rownames.dds3., c("id", "symbol"),sep ="([|])")
+
+all(newrownames$id == newrownames$symbol)
+all(newrownames2$id == newrownames2$symbol)
+all(newrownames3$id == newrownames3$symbol)
+sum(is.na(newrownames$symbol))
+sum(duplicated(newrownames$symbol))
+sum(is.na(newrownames2$symbol))
+sum(duplicated(newrownames2$symbol))
+sum(is.na(newrownames3$symbol))
+sum(duplicated(newrownames3$symbol))
+
+mcols(dds) <- cbind(mcols(dds), newrownames)
+mcols(dds2) <- cbind(mcols(dds2), newrownames2)
+mcols(dds3) <- cbind(mcols(dds3), newrownames3)
+
+# Add gene symbol to results
+
+res$symbol <- mcols(dds)$symbol
+res2$symbol <- mcols(dds)$symbol
+res3$symbol <- mcols(dds2)$symbol
+
+## Add Annotations
+
+res$description <- mapIds(
+  x = org.Mm.eg.db,
+  keys = res$symbol,
+  column = "GENENAME",
+  keytype = "SYMBOL",
+  multiVals = "first"
+)
+
+res2$description <- mapIds(
+  x = org.Mm.eg.db,
+  keys = res2$symbol,
+  column = "GENENAME",
+  keytype = "SYMBOL",
+  multiVals = "first"
+)
+
+res3$description <- mapIds(
+  x = org.Mm.eg.db,
+  keys = res3$symbol,
+  column = "GENENAME",
+  keytype = "SYMBOL",
+  multiVals = "first"
+)
+
+# Add ENTREZ ID
+res$entrez <- mapIds(
+  x = org.Mm.eg.db,
+  keys = res$symbol,
+  column = "ENTREZID",
+  keytype = "SYMBOL",
+  multiVals = "first"
+)
+
+res2$entrez <- mapIds(
+  x = org.Mm.eg.db,
+  keys = res2$symbol,
+  column = "ENTREZID",
+  keytype = "SYMBOL",
+  multiVals = "first"
+)
+
+res3$entrez <- mapIds(
+  x = org.Mm.eg.db,
+  keys = res3$symbol,
+  column = "ENTREZID",
+  keytype = "SYMBOL",
+  multiVals = "first"
+)
+
+# Add ENSEMBL ID
+res$ensembl <- mapIds(
+  x = org.Mm.eg.db,
+  keys = res$entrez,
+  column = "ENSEMBL",
+  keytype = "ENTREZID",
+  multiVals = "first"
+)
+
+res2$ensembl <- mapIds(
+  x = org.Mm.eg.db,
+  keys = res2$entrez,
+  column = "ENSEMBL",
+  keytype = "ENTREZID",
+  multiVals = "first"
+)
+
+res3$ensembl <- mapIds(
+  x = org.Mm.eg.db,
+  keys = res3$entrez,
+  column = "ENSEMBL",
+  keytype = "ENTREZID",
+  multiVals = "first"
+)
+
+```
+
+
+After annotation I subset the results to only view the significantly differentially expressed genes with an adjusted p-value \> 0.05.
+
+```{r Subset Significant Results, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
+## Subset for significant genes only
+results_sig <- subset(res, padj < 0.05)
+results_sig2 <- subset(res2, padj < 0.05)
+results_sig3 <- subset(res3, padj < 0.05)
+```
+
+### Craving vs FoodTrained
+
+```{r Craving vs FoodTrained Significant Results, echo=FALSE, results='asis'}
+kable((head(results_sig, 20)), caption = "Significant DEGs Craving vs FoodTrained", format = "html", align = "l", booktabs = TRUE) %>%
+  kable_styling(html_font = "Arial", font_size = 10, bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  scroll_box(width = "1000px", height = "500px")
+```
+
+### Maintenance vs FoodTrained
+
+```{r Maintenance vs FoodTrained Significant Results, echo=FALSE, results='asis'}
+kable((head(results_sig2, 20)), caption = "Significant DEGs Maintenance vs FoodTrained", format = "html", align = "l", booktabs = TRUE) %>%
+  kable_styling(html_font = "Arial", font_size = 10, bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  scroll_box(width = "1000px", height = "500px")
+```
+
+### Craving vs Maintenance
+
+```{r Craving vs Maintenance Significant Results, echo=FALSE, results='asis'}
+kable((head(results_sig3, 20)), caption = "Significant Craving vs Maintenance", format = "html", align = "l", booktabs = TRUE) %>%
+  kable_styling(html_font = "Arial", font_size = 10, bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  scroll_box(width = "1000px", height = "500px")
+```
+
+
+```{r Write Significant Results to CSV, eval=FALSE, include=FALSE}
+write_csv((as.data.frame(results_sig)), "output/Sig_Res_Craving_vs_FoodTrained.csv")
+write_csv((as.data.frame(results_sig2)), "output/Sig_Res_Maintenance_vs_FoodTrained.csv")
+write_csv((as.data.frame(results_sig3)), "output/Sig_Res_Craving_vs_Maintenance.csv")
+```
+
+## Visualize Shrinkage Estimations
+
+Following subsetting, I want to see how the data looks based on effect size so I have run a shrinkage model using the "apeglm" method which normalizes counts based on effect size without major changes to data structure. I have included non-shrunk models as well for comparison.
+
+```{r Shrinkage Estimation, echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+## Log Fold Change Shrinkage Estimation
+resLFC <- lfcShrink(dds, coef = "condition_Craving_vs_FoodTrained", type = "apeglm")
+resLFC2 <- lfcShrink(dds, coef = "condition_Maintenance_vs_FoodTrained", type = "apeglm")
+resLFC3 <- lfcShrink(dds2, coef = "condition_Craving_vs_Maintenance", type = "apeglm")
+
+```
+
+### Non-Shrunken L2FC {.tabset}
+
+#### Craving vs FoodTrained
+
+```{r Non-Shrunken Estimate Plots, echo=FALSE, message=FALSE, warning=FALSE}
+DESeq2::plotMA(res, ylim = c(-5, 5), alpha = 0.05, main = "Non-Shrunken L2FC Craving vs FoodTrained")
+```
+
+#### Maintenance vs FoodTrained
+
+```{r Non-Shrunken Estimate Plots2, echo=FALSE, message=FALSE, warning=FALSE}
+DESeq2::plotMA(res2, ylim = c(-5, 5), alpha = 0.05, main = "Non-Shrunken L2FC Maintenance vs FoodTrained")
+```
+
+#### Craving vs Maintenance
+
+```{r Non-Shrunken Estimate Plots3, echo=FALSE, message=FALSE, warning=FALSE}
+DESeq2::plotMA(res3, ylim = c(-5, 5), alpha = 0.05, main = "Non-Shrunken L2FC Craving vs Maintenance")
+```
+
+### Shrunken L2FC {.tabset}
+
+#### Craving vs FoodTrained
+
+```{r Shrunken Estimate Plots, echo=FALSE, message=FALSE, warning=FALSE}
+DESeq2::plotMA(resLFC, alpha = 0.05, main = "Shrunken LF2C Craving vs FoodTrained")
+```
+
+#### Maintenance vs FoodTrained
+
+```{r Shrunken Estimate Plots2, echo=FALSE, message=FALSE, warning=FALSE}
+DESeq2::plotMA(resLFC2, alpha = 0.05, main = "Shrunken L2FC Maintenance vs FoodTrained")
+```
+
+#### Craving vs Maintenance
+
+```{r Shrunken Estimate Plots3, echo=FALSE, message=FALSE, warning=FALSE}
+DESeq2::plotMA(resLFC3, alpha = 0.05, main = "Shrunken LF2C Craving vs Maintenance L2FC")
+```
+
+
+# Looking at Differentially Expressed Genes
+
+We can generate a matrix to identify where our differentially expressed genes lie between each group based on an alpha value of 0.05. 
+
+```{r Matrix of Differentially Expressed genes across groups, echo=TRUE, message=FALSE, warning=FALSE}
+## Matrix Visualizaattion
+x <- vsDEGMatrix(
+  data = dds, padj = 0.05, d.factor = "condition",
+  type = "deseq", title = TRUE, legend = TRUE, grid = TRUE
+)
+```
+
+```{r Writing matrix to PDF File, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+pdf("plots/CIVSA2_DEG_Matrix.pdf")
+x
+dev.off()
+```
+
+
+```{r Writing matrix to CSV File, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+## Write table to csv files
+df_scatter <- x$data
+
+write.table(
+  x = as.data.frame(df_scatter),
+  file = "results/DEGs_Flower_Matrix_CIVSA_Experiment_05.txt",
+  sep = "\t",
+  quote = F,
+  col.names = NA
+)
+```
+
+```{r Save All Counts and Results Files, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+## Write table to csv files
+write.table(
+  x = as.data.frame(counts(dds), normalized = T),
+  file = "data/CIVSA_normalized_counts_DESeq2.txt",
+  sep = "\t",
+  quote = F,
+  col.names = NA
+)
+
+
+# Write significant normalized gene counts to a .txt file
+write.table(
+  x = counts(dds[rownames(results_sig)], normalized = T),
+  file = "results/normcounts/Sig_Norm_Counts_Craving_vs_FoodTrained.txt",
+  sep = "\t",
+  quote = F,
+  col.names = NA
+)
+
+write.table(
+  x = counts(dds[rownames(results_sig2)], normalized = T),
+  file = "results/normcounts/Sig_Norm_Counts_Maintenance_vs_FoodTrained.txt",
+  sep = "\t",
+  quote = F,
+  col.names = NA
+)
+
+write.table(
+  x = counts(dds[rownames(results_sig3)], normalized = T),
+  file = "results/normcounts/Sig_Norm_Counts_Craving_vs_Maintenance.txt",
+  sep = "\t",
+  quote = F,
+  col.names = NA
+)
+```
+
+# Data Visualization
+
+## Normalized Counts and Plots of Genes of Interest {.tabset}
+
+```{r Plot Counts -- Selected 1, echo=TRUE, message=FALSE, warning=FALSE}
+level_order <- c("FoodTrained", "Maintenance", "Craving") # this vector might be useful for other plots/analyses
+
+normalized_counts <- counts(dds, normalized = TRUE)
+```
+
+### Grin1
+
+```{r Selected Genes, echo=TRUE, message=FALSE, warning=FALSE}
+####################################### HSPA8
+
+d2 <- plotCounts(dds,
+  gene = "Grin1|Grin1", intgroup = "condition",
+  returnData = TRUE
+)
+
+a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
+  geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
+  theme_bw() +
+  xlab("Condition")+
+  ylab("Normalized Counts")+
+  ggtitle(
+    label = "Grin1 Expression",
+    subtitle = "Normalized Gene Expression"
+  )
+
+a
+```
+
+### Gabbr1 
+
+```{r Selected Genes2, echo=TRUE, message=FALSE, warning=FALSE}
+####################################### HSP90ab1
+
+
+d2 <- plotCounts(dds,
+  gene = "Gabbr1|Gabbr1", intgroup = "condition",
+  returnData = TRUE
+)
+
+a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
+  geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
+  theme_bw() +
+  xlab("Condition")+
+  ylab("Normalized Counts")+
+  ggtitle(
+    label = "Gabbr1 Expression",
+    subtitle = "Normalized Gene Expression"
+  )
+
+a
+```
+
+### Th
+
+```{r Selected Genes3, echo=TRUE, message=FALSE, warning=FALSE}
+####################################### Dnajb1
+
+
+d2 <- plotCounts(dds,
+  gene = "Th|Th", intgroup = "condition",
+  returnData = TRUE
+)
+
+a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
+  geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
+  theme_bw() +
+  xlab("Condition")+
+  ylab("Normalized Counts")+
+  ggtitle(
+    label = "Th Expression",
+    subtitle = "Normalized Gene Expression"
+  )
+
+a
+```
+
+### Ehmt2
+
+```{r Selected Genes4, echo=TRUE, message=FALSE, warning=FALSE}
+####################################### Dnajb1
+
+
+d2 <- plotCounts(dds,
+  gene = "Ehmt2|Ehmt2", intgroup = "condition",
+  returnData = TRUE
+)
+
+a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
+  geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
+  theme_bw() +
+  xlab("Condition")+
+  ylab("Normalized Counts")+
+  ggtitle(
+    label = "Ehmt2 Expression",
+    subtitle = "Normalized Gene Expression"
+  )
+
+a
+```
+
+### Setdb1
+
+```{r Selected Genes5, echo=TRUE, message=FALSE, warning=FALSE}
+####################################### Dnajb1
+
+
+d2 <- plotCounts(dds,
+  gene = "Setdb1|Setdb1", intgroup = "condition",
+  returnData = TRUE
+)
+
+a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
+  geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
+  theme_bw() +
+  xlab("Condition")+
+  ylab("Normalized Counts")+
+  ggtitle(
+    label = "Setdb1 Expression",
+    subtitle = "Normalized Gene Expression"
+  )
+
+a
+```
+
+
+### Atf7ip
+
+```{r Selected Genes6, echo=TRUE, message=FALSE, warning=FALSE}
+####################################### Dnajb1
+
+
+d2 <- plotCounts(dds,
+  gene = "Atf7ip|Atf7ip", intgroup = "condition",
+  returnData = TRUE
+)
+
+a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
+  geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
+  theme_bw() +
+  xlab("Condition")+
+  ylab("Normalized Counts")+
+  ggtitle(
+    label = "Atf7ip Expression",
+    subtitle = "Normalized Gene Expression"
+  )
+
+a
+```
+
+
+## Visualize Results: PCA
+
+For visualization I am converting all analyses to logarithmic. Following this I have completed a PCA for each analyses based on all genes together.
+
+
+```{r Plot PCA, echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+# Convert all samples to rlog for data visualization
+
+ddsMat_rlog <- DESeq2::rlog(dds, blind = FALSE)
+
+nudge <- position_nudge(y =2)
+
+pdf(file = "plots/PCA_CIVSA.pdf", width = 6, height = 6);
+
+pcaData2 <- plotPCA(ddsMat_rlog, intgroup = "condition", returnData = TRUE)
+pcaData2$condition <- factor(pcaData2$condition, levels = c("FoodTrained", "Maintenance", "Craving"))
+percentVar2 <- round(100 * attr(pcaData2, "percentVar"))
+ggplot(pcaData2, aes(PC1, PC2, color=condition, label = colnames(dds))) +
+  theme_bw() + 
+  geom_point(size = 2) + 
+  xlab(paste0("PC1: ",percentVar2[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar2[2],"% variance")) + 
+  ggrepel::geom_label_repel(box.padding = 1, max.overlaps = Inf) +
+  coord_fixed() +
+  ggtitle(label = "Principal Component Analysis (PCA)", 
+          subtitle = "rlog transformed genes") 
+
+dev.off()
+
+
+ggplot(pcaData2, aes(PC1, PC2, color=condition, label = colnames(dds))) +
+  theme_bw() + 
+  geom_point(size = 2) + 
+  xlab(paste0("PC1: ",percentVar2[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar2[2],"% variance")) + 
+  ggrepel::geom_label_repel(box.padding = 1, max.overlaps = Inf) +
+  coord_fixed() +
+  ggtitle(label = "Principal Component Analysis (PCA)", 
+          subtitle = "rlog transformed genes") 
+
+
+
+```
+
+
+## Visualize Results Venn Diagrams {.tabset}
+
+### Up-Regulated Genes
+
+```{r}
+
+myCol <- brewer.pal(3, "Pastel2")
+
+results_sig_Table_up <- subset(results_sig, log2FoldChange > 0)
+results_sig2_Table_up <- subset(results_sig2, log2FoldChange > 0)
+results_sig3_Table_up <- subset(results_sig3, log2FoldChange > 0)
+
+new_ressig1_up  <- rownames(results_sig_Table_up)
+new_ressig2_up <- rownames(results_sig2_Table_up)
+new_ressig3_up  <- rownames(results_sig3_Table_up)
+
+# Generate Venn Diagram 
+venn.plot.up <- venn.diagram(
+  x = list(
+    "Crv_vs_FT" = new_ressig1_up,
+    "Maint_vs_FT" = new_ressig2_up,
+    "Crv_vs_Maint" = new_ressig3_up),
+    fill = myCol,
+    cex = .8,
+    fontface = "bold",
+    fontfamily = "sans",
+    cat.cex = 0.8,
+    cat.fontface = "bold",
+    cat.default.pos = "outer",
+    cat.pos = c(0, 0, 0),
+    cat.fontfamily = "sans",
+    rotation = 1,
+  category.names = c("Craving_vs_FoodTrained", "Maintenance_vs_FoodTrained", "Craving_vs_Maintenance"),
+  filename = NULL,
+  output = TRUE
+)
+
+# Save Venn Diagram
+pdf("plots/CIVSA_venn_diagram_Up.pdf")
+grid.draw(venn.plot.up)
+dev.off()
+
+# Display Venn Diagram in RStudio
+grid.draw(venn.plot.up)
+
+```
+
+### Down-Regulated Genes
+
+```{r}
+results_sig_Table_down <- subset(results_sig, log2FoldChange < 0)
+results_sig2_Table_down <- subset(results_sig2, log2FoldChange < 0)
+results_sig3_Table_down <- subset(results_sig3, log2FoldChange < 0)
+
+new_ressig1_down  <- rownames(results_sig_Table_down)
+new_ressig2_down  <- rownames(results_sig2_Table_down)
+new_ressig3_down  <- rownames(results_sig3_Table_down)
+
+
+# Generate Venn Diagram UP
+venn.plot.down <- venn.diagram(
+  x = list(
+    "Crv_vs_FT" = new_ressig1_down,
+    "Maint_vs_FT" = new_ressig2_down,
+    "Crv_vs_Maint" = new_ressig3_down),
+    fill = myCol,
+    cex = .8,
+    fontface = "bold",
+    fontfamily = "sans",
+    cat.cex = 0.8,
+    cat.fontface = "bold",
+    cat.default.pos = "outer",
+    cat.pos = c(0, 0, 0),
+    cat.fontfamily = "sans",
+    rotation = 1,
+  category.names = c("Craving_vs_FoodTrained", "Maintenance_vs_FoodTrained", "Craving_vs_Maintenance"),
+  filename = NULL,
+  output = TRUE
+)
+
+# Save Venn Diagram
+pdf("plots/CIVSA_venn_diagram_Down.pdf")
+grid.draw(venn.plot.down)
+dev.off()
+
+# Display Venn Diagram in RStudio
+grid.draw(venn.plot.down)
+
+```
+
+
+## Visualize Results: Heatmap (Data Generation)
+
+```{r PheatMap, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+
+conflicts_prefer(pheatmap::pheatmap)
+
+samples <- as.tibble(read.csv("data/sample_info_CIVSA.csv", sep = ","))
+
+annot_col <- samples %>%
+  column_to_rownames("samplename") %>%
+  as.data.frame()
+
+ann_colors <- list(
+  Group = c(FoodTrained = "blue", Maintenance = "orange", Craving = "red")
+)
+
+select <- order(rowMeans(counts(dds, normalized = TRUE)),
+  decreasing = TRUE
+) # [1:75]
+
+mat <- assay(ddsMat_rlog)[select, ]
+matrownames <- data.frame(rownames(mat))
+matrownamesnew <- matrownames %>% separate(rownames.mat., c("id", "symbol"), sep = "([|])")
+
+```
+
+## Visualize Results: Heatmap {.tabset}
+
+```{r Filter Heatmaps by DEGs, fig.height=8, fig.width=8, message=FALSE, warning=FALSE}
+
+ressig1 <- as.data.frame(results_sig)
+ressig2 <- as.data.frame(results_sig2)
+ressig3 <- as.data.frame(results_sig3)
+
+ressig1$Comparison <- "Craving vs FoodTrained"
+ressig2$Comparison <- "Maintenance vs FoodTrained"
+ressig3$Comparison <- "Craving vs Maintenance"
+
+ressig1_highlfc_pos <- ressig1[ressig1$log2FoldChange >= 1.5,]
+ressig1_highlfc_neg <- ressig1[ressig1$log2FoldChange <= -1.5,]
+ressig2_highlfc_pos <- ressig2[ressig2$log2FoldChange >= 1.5,]
+ressig2_highlfc_neg <- ressig2[ressig2$log2FoldChange <= -1.5,]
+ressig3_highlfc_pos <- ressig3[ressig3$log2FoldChange >= 1.5,]
+ressig3_highlfc_neg <- ressig3[ressig3$log2FoldChange <= -1.5,]
+
+temp_sigdegshm <- rbind(ressig1_highlfc_pos, ressig1_highlfc_neg)
+temp_sigdegshm2 <- rbind(temp_sigdegshm, ressig2_highlfc_pos)
+temp_sigdegshm3 <- rbind(temp_sigdegshm2, ressig2_highlfc_neg)
+temp_sigdegshm4 <- rbind(temp_sigdegshm3, ressig3_highlfc_pos)
+temp_sigdegshm5 <- rbind(temp_sigdegshm4, ressig3_highlfc_neg)
+
+temp_sigdegshm6 <- temp_sigdegshm5[temp_sigdegshm5$lfcSE <=1,]
+
+dup_rows <- duplicated(temp_sigdegshm6$symbol)
+data_dedup <- temp_sigdegshm6[!dup_rows, ]
+
+rows <- rownames(data_dedup)
+
+select <- order(rowMeans(counts(dds,normalized=TRUE)),
+                decreasing=TRUE)#[1:1500]
+
+mat <- assay(ddsMat_rlog)[select,]
+
+data_mod <- mat[rownames(mat) %in% rows, ] 
+
+matrownames_data_mod <- data.frame(rownames(data_mod))
+
+matrownames_data_mod <- matrownames_data_mod %>% separate(rownames.data_mod., c("id", "symbol"),sep ="([|])")
+
+samples <- as.tibble(read.csv("data/sample_info_CIVSA.csv", sep = ","))
+
+annot_col <- samples %>%
+  column_to_rownames('samplename') %>%
+  as.data.frame()
+
+ann_colors = list(
+  condition = as.factor(c(FoodTrained = "slateblue2", Maintenance = "limegreen", Craving = "violetred2")),
+  Group = as.factor(c(FoodTrained = "slateblue2", Maintenance = "limegreen", Craving = "violetred2")))
+
+```
+
+### Unsupervised Clustering
+
+```{r Filter Heatmaps by DEGs2 Unsupervised, fig.height=8, fig.width=8, message=FALSE, warning=FALSE}
+pheatmap::pheatmap(
+  mat = data_mod,
+  color = colorRampPalette(rev(brewer.pal(11, "RdYlBu")))(155),
+  scale = "row", # Scale genes to Z-score (how many standard deviations),
+  annotation_col = annot_col,
+  #annotation_colors = ann_colors,# Change the default colors of the annotations
+  fontsize = 5, # Make fonts smaller
+  #cellwidth = 15, # Make the cells wider
+  #cellheight = 4.5, # Make the cells wider
+  show_colnames = F,
+  cluster_rows = T,
+  cluster_cols = T,
+  annotation_legend = T,
+  legend = T,
+  show_rownames = F,
+  clustering_distance_rows = "correlation",
+  clustering_method = "ward.D",
+  main = "Heatmap of Significant DEGs -- Unsupervised Clustering",
+  cluster_row_slices = TRUE,
+  show_row_dend = FALSE,
+  cutree_rows = 4,
+  cutree_cols = 3,
+  treeheight_row = 10,
+  treeheight_col = 10,
+  # kmeans_k = 4,
+  # display_numbers = TRUE,
+  #filename = "plots/CIVSA2_HeatmapDEGs_Unsupervised.pdf",
+  legend_labels = c("FoodTrained", "Maintenance", "Craving")
+  #labels_row = matrownames_data_mod$symbol
+)
+```
+### Supervised Clustering
+
+```{r Filter Heatmaps by DEGs2 Supervised, fig.height=8, fig.width=8, message=FALSE, warning=FALSE}
+pheatmap::pheatmap(
+  mat = data_mod,
+  color = colorRampPalette(rev(brewer.pal(11, "RdYlBu")))(155),
+  scale = "row", # Scale genes to Z-score (how many standard deviations),
+  annotation_col = annot_col,
+  #annotation_colors = ann_colors,# Change the default colors of the annotations
+  fontsize = 8, # Make fonts smaller
+  cellwidth = 10, # Make the cells wider
+  cellheight = 3, # Make the cells wider
+  show_colnames = F,
+  cluster_rows = T,
+  cluster_cols = F,
+  annotation_legend = T,
+  legend = T,
+  show_rownames = F,
+  clustering_distance_rows = "correlation",
+  clustering_method = "ward.D",
+  main = "Heatmap of Significant DEGs -- Supervised Clustering",
+  cluster_row_slices = TRUE,
+  show_row_dend = FALSE,
+  cutree_rows = 4,
+  cutree_cols = 3,
+  gaps_col = c(4, 7),
+  treeheight_row = 10,
+  treeheight_col = 10,
+  # kmeans_k = 4,
+  # display_numbers = TRUE,
+  #filename = "plots/CIVSA2_HeatmapDEGs_Final_Unclustered.pdf",
+  legend_labels = c("FoodTrained", "Maintenance", "Craving"),
+)
+# labels_row = matrownames_data_mod$symbol)
+```
+
+```{r Filter Heatmaps by DEGs2 Condensed-Supervised, fig.height=8, fig.width=8, message=FALSE, warning=FALSE}
+pheatmap::pheatmap(
+  mat = data_mod,
+  color = colorRampPalette(rev(brewer.pal(11, "RdYlBu")))(155),
+  scale = "row", # Scale genes to Z-score (how many standard deviations),
+  annotation_col = annot_col,
+  #annotation_colors = ann_colors,# Change the default colors of the annotations
+  fontsize = 8, # Make fonts smaller
+ #cellwidth = 10, # Make the cells wider
+  #cellheight = 3, # Make the cells wider
+  show_colnames = F,
+  cluster_rows = T,
+  cluster_cols = F,
+  annotation_legend = T,
+  legend = T,
+  show_rownames = F,
+  clustering_distance_rows = "correlation",
+  clustering_method = "ward.D",
+  main = "Heatmap of Significant DEGs -- Supervised Clustering",
+  cluster_row_slices = TRUE,
+  show_row_dend = FALSE,
+  cutree_rows = 4,
+  cutree_cols = 3,
+  gaps_col = c(4, 7),
+  treeheight_row = 10,
+  treeheight_col = 10,
+  # kmeans_k = 4,
+  # display_numbers = TRUE,
+  #filename = "plots/CIVSA2_HeatmapDEGs_Final_Unclustered_Condensed.pdf",
+  legend_labels = c("FoodTrained", "Maintenance", "Craving"),
+)
+# labels_row = matrownames_data_mod$symbol)
+```
