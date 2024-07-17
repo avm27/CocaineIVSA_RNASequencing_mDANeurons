@@ -132,15 +132,12 @@ Running DeSeq2 analysis with factor levels of FoodTrained vs Maintenance, Cravin
 
 dds <- DESeqDataSetFromMatrix(countData = countData, colData = colData, design = ~condition)
 dds2 <- DESeqDataSetFromMatrix(countData = countData, colData = colData, design = ~condition)
-dds3 <- DESeqDataSetFromMatrix(countData = countData, colData = colData, design = ~condition)
 
 ## Relevel Condition to Analyze Each group against Another
 dds$condition <- relevel(dds$condition, ref = "FoodTrained")
 dds <- DESeq(dds)
 dds2$condition <- relevel(dds2$condition, ref = "Maintenance")
 dds2 <- DESeq(dds2)
-dds3$condition <- relevel(dds3$condition, ref = "Craving")
-dds3 <- DESeq(dds3)
 
 ```
 
@@ -196,22 +193,15 @@ newrownames <- deseqrownames %>% separate(rownames.dds., c("id", "symbol"),sep =
 deseqrownames2 <- data.frame(rownames(dds2))
 newrownames2 <- deseqrownames2 %>% separate(rownames.dds2., c("id", "symbol"),sep ="([|])")
 
-deseqrownames3 <- data.frame(rownames(dds3))
-newrownames3 <- deseqrownames3 %>% separate(rownames.dds3., c("id", "symbol"),sep ="([|])")
-
 all(newrownames$id == newrownames$symbol)
 all(newrownames2$id == newrownames2$symbol)
-all(newrownames3$id == newrownames3$symbol)
 sum(is.na(newrownames$symbol))
 sum(duplicated(newrownames$symbol))
 sum(is.na(newrownames2$symbol))
 sum(duplicated(newrownames2$symbol))
-sum(is.na(newrownames3$symbol))
-sum(duplicated(newrownames3$symbol))
 
 mcols(dds) <- cbind(mcols(dds), newrownames)
 mcols(dds2) <- cbind(mcols(dds2), newrownames2)
-mcols(dds3) <- cbind(mcols(dds3), newrownames3)
 
 # Add gene symbol to results
 
@@ -461,7 +451,6 @@ write.table(
 ```
 
 # Data Visualization
-
 ## Normalized Counts and Plots of Genes of Interest {.tabset}
 
 ```{r Plot Counts -- Selected 1, echo=TRUE, message=FALSE, warning=FALSE}
@@ -473,7 +462,7 @@ normalized_counts <- counts(dds, normalized = TRUE)
 ### Grin1
 
 ```{r Selected Genes, echo=TRUE, message=FALSE, warning=FALSE}
-####################################### HSPA8
+#### Grin1
 
 d2 <- plotCounts(dds,
   gene = "Grin1|Grin1", intgroup = "condition",
@@ -482,6 +471,7 @@ d2 <- plotCounts(dds,
 
 a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
   geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
+  scale_color_manual(values=c("#90BFF9", "#EECCF9", "#FFC080")) +
   theme_bw() +
   xlab("Condition")+
   ylab("Normalized Counts")+
@@ -496,7 +486,7 @@ a
 ### Gabbr1 
 
 ```{r Selected Genes2, echo=TRUE, message=FALSE, warning=FALSE}
-####################################### HSP90ab1
+#### Gabbr1
 
 
 d2 <- plotCounts(dds,
@@ -506,6 +496,7 @@ d2 <- plotCounts(dds,
 
 a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
   geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
+  scale_color_manual(values=c("#90BFF9", "#EECCF9", "#FFC080")) +
   theme_bw() +
   xlab("Condition")+
   ylab("Normalized Counts")+
@@ -520,7 +511,7 @@ a
 ### Th
 
 ```{r Selected Genes3, echo=TRUE, message=FALSE, warning=FALSE}
-####################################### Dnajb1
+#### Th
 
 
 d2 <- plotCounts(dds,
@@ -530,6 +521,7 @@ d2 <- plotCounts(dds,
 
 a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
   geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
+  scale_color_manual(values=c("#90BFF9", "#EECCF9", "#FFC080")) +
   theme_bw() +
   xlab("Condition")+
   ylab("Normalized Counts")+
@@ -544,8 +536,7 @@ a
 ### Ehmt2
 
 ```{r Selected Genes4, echo=TRUE, message=FALSE, warning=FALSE}
-####################################### Dnajb1
-
+#### Ehmt2
 
 d2 <- plotCounts(dds,
   gene = "Ehmt2|Ehmt2", intgroup = "condition",
@@ -554,6 +545,7 @@ d2 <- plotCounts(dds,
 
 a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
   geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
+  scale_color_manual(values=c("#90BFF9", "#EECCF9", "#FFC080")) +
   theme_bw() +
   xlab("Condition")+
   ylab("Normalized Counts")+
@@ -568,8 +560,7 @@ a
 ### Setdb1
 
 ```{r Selected Genes5, echo=TRUE, message=FALSE, warning=FALSE}
-####################################### Dnajb1
-
+#### Setdb1
 
 d2 <- plotCounts(dds,
   gene = "Setdb1|Setdb1", intgroup = "condition",
@@ -578,6 +569,7 @@ d2 <- plotCounts(dds,
 
 a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
   geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
+  scale_color_manual(values=c("#90BFF9", "#EECCF9", "#FFC080")) +
   theme_bw() +
   xlab("Condition")+
   ylab("Normalized Counts")+
@@ -593,8 +585,7 @@ a
 ### Atf7ip
 
 ```{r Selected Genes6, echo=TRUE, message=FALSE, warning=FALSE}
-####################################### Dnajb1
-
+#### Atf7ip
 
 d2 <- plotCounts(dds,
   gene = "Atf7ip|Atf7ip", intgroup = "condition",
@@ -603,6 +594,7 @@ d2 <- plotCounts(dds,
 
 a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
   geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
+  scale_color_manual(values=c("#90BFF9", "#EECCF9", "#FFC080")) +
   theme_bw() +
   xlab("Condition")+
   ylab("Normalized Counts")+
@@ -615,10 +607,10 @@ a
 ```
 
 
-## Visualize Results: PCA
+
+## Principal Components Analysis (PCA)
 
 For visualization I am converting all analyses to logarithmic. Following this I have completed a PCA for each analyses based on all genes together.
-
 
 ```{r Plot PCA, echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
 # Convert all samples to rlog for data visualization
@@ -627,7 +619,7 @@ ddsMat_rlog <- DESeq2::rlog(dds, blind = FALSE)
 
 nudge <- position_nudge(y =2)
 
-pdf(file = "plots/PCA_CIVSA.pdf", width = 6, height = 6);
+#pdf(file = "plots/PCA_CIVSA.pdf", width = 6, height = 6);
 
 pcaData2 <- plotPCA(ddsMat_rlog, intgroup = "condition", returnData = TRUE)
 pcaData2$condition <- factor(pcaData2$condition, levels = c("FoodTrained", "Maintenance", "Craving"))
@@ -642,26 +634,12 @@ ggplot(pcaData2, aes(PC1, PC2, color=condition, label = colnames(dds))) +
   ggtitle(label = "Principal Component Analysis (PCA)", 
           subtitle = "rlog transformed genes") 
 
-dev.off()
-
-
-ggplot(pcaData2, aes(PC1, PC2, color=condition, label = colnames(dds))) +
-  theme_bw() + 
-  geom_point(size = 2) + 
-  xlab(paste0("PC1: ",percentVar2[1],"% variance")) +
-  ylab(paste0("PC2: ",percentVar2[2],"% variance")) + 
-  ggrepel::geom_label_repel(box.padding = 1, max.overlaps = Inf) +
-  coord_fixed() +
-  ggtitle(label = "Principal Component Analysis (PCA)", 
-          subtitle = "rlog transformed genes") 
-
-
+#dev.off()
 
 ```
 
 
-## Visualize Results Venn Diagrams {.tabset}
-
+## Venn Diagrams {.tabset}
 ### Up-Regulated Genes
 
 ```{r}
@@ -698,12 +676,12 @@ venn.plot.up <- venn.diagram(
 )
 
 # Save Venn Diagram
-pdf("plots/CIVSA_venn_diagram_Up.pdf")
+#pdf("plots/CIVSA_venn_diagram_Up.pdf")
 grid.draw(venn.plot.up)
-dev.off()
+#dev.off()
 
 # Display Venn Diagram in RStudio
-grid.draw(venn.plot.up)
+#grid.draw(venn.plot.up)
 
 ```
 
@@ -741,9 +719,9 @@ venn.plot.down <- venn.diagram(
 )
 
 # Save Venn Diagram
-pdf("plots/CIVSA_venn_diagram_Down.pdf")
-grid.draw(venn.plot.down)
-dev.off()
+#pdf("plots/CIVSA_venn_diagram_Down.pdf")
+#grid.draw(venn.plot.down)
+#dev.off()
 
 # Display Venn Diagram in RStudio
 grid.draw(venn.plot.down)
@@ -751,7 +729,6 @@ grid.draw(venn.plot.down)
 ```
 
 
-## Visualize Results: Heatmap (Data Generation)
 
 ```{r PheatMap, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 
@@ -777,7 +754,7 @@ matrownamesnew <- matrownames %>% separate(rownames.mat., c("id", "symbol"), sep
 
 ```
 
-## Visualize Results: Heatmap {.tabset}
+## Heatmaps of Differentially Expressed Genes {.tabset}
 
 ```{r Filter Heatmaps by DEGs, fig.height=8, fig.width=8, message=FALSE, warning=FALSE}
 
@@ -838,13 +815,10 @@ ann_colors = list(
 pheatmap::pheatmap(
   mat = data_mod,
   color = colorRampPalette(rev(brewer.pal(11, "RdYlBu")))(155),
-  scale = "row", # Scale genes to Z-score (how many standard deviations),
+  scale = "row",
   annotation_col = annot_col,
-  #annotation_colors = ann_colors,# Change the default colors of the annotations
-  fontsize = 5, # Make fonts smaller
-  #cellwidth = 15, # Make the cells wider
-  #cellheight = 4.5, # Make the cells wider
-  show_colnames = F,
+  fontsize = 10, 
+  show_colnames = T,
   cluster_rows = T,
   cluster_cols = T,
   annotation_legend = T,
@@ -859,60 +833,20 @@ pheatmap::pheatmap(
   cutree_cols = 3,
   treeheight_row = 10,
   treeheight_col = 10,
-  # kmeans_k = 4,
-  # display_numbers = TRUE,
-  #filename = "plots/CIVSA2_HeatmapDEGs_Unsupervised.pdf",
   legend_labels = c("FoodTrained", "Maintenance", "Craving")
-  #labels_row = matrownames_data_mod$symbol
 )
 ```
-### Supervised Clustering
 
-```{r Filter Heatmaps by DEGs2 Supervised, fig.height=8, fig.width=8, message=FALSE, warning=FALSE}
-pheatmap::pheatmap(
-  mat = data_mod,
-  color = colorRampPalette(rev(brewer.pal(11, "RdYlBu")))(155),
-  scale = "row", # Scale genes to Z-score (how many standard deviations),
-  annotation_col = annot_col,
-  #annotation_colors = ann_colors,# Change the default colors of the annotations
-  fontsize = 8, # Make fonts smaller
-  cellwidth = 10, # Make the cells wider
-  cellheight = 3, # Make the cells wider
-  show_colnames = F,
-  cluster_rows = T,
-  cluster_cols = F,
-  annotation_legend = T,
-  legend = T,
-  show_rownames = F,
-  clustering_distance_rows = "correlation",
-  clustering_method = "ward.D",
-  main = "Heatmap of Significant DEGs -- Supervised Clustering",
-  cluster_row_slices = TRUE,
-  show_row_dend = FALSE,
-  cutree_rows = 4,
-  cutree_cols = 3,
-  gaps_col = c(4, 7),
-  treeheight_row = 10,
-  treeheight_col = 10,
-  # kmeans_k = 4,
-  # display_numbers = TRUE,
-  #filename = "plots/CIVSA2_HeatmapDEGs_Final_Unclustered.pdf",
-  legend_labels = c("FoodTrained", "Maintenance", "Craving"),
-)
-# labels_row = matrownames_data_mod$symbol)
-```
+### Supervised Clustering
 
 ```{r Filter Heatmaps by DEGs2 Condensed-Supervised, fig.height=8, fig.width=8, message=FALSE, warning=FALSE}
 pheatmap::pheatmap(
   mat = data_mod,
   color = colorRampPalette(rev(brewer.pal(11, "RdYlBu")))(155),
-  scale = "row", # Scale genes to Z-score (how many standard deviations),
+  scale = "row",
   annotation_col = annot_col,
-  #annotation_colors = ann_colors,# Change the default colors of the annotations
-  fontsize = 8, # Make fonts smaller
- #cellwidth = 10, # Make the cells wider
-  #cellheight = 3, # Make the cells wider
-  show_colnames = F,
+  fontsize = 10,
+  show_colnames = T,
   cluster_rows = T,
   cluster_cols = F,
   annotation_legend = T,
@@ -925,13 +859,358 @@ pheatmap::pheatmap(
   show_row_dend = FALSE,
   cutree_rows = 4,
   cutree_cols = 3,
-  gaps_col = c(4, 7),
+  gaps_col = c(3, 6),
   treeheight_row = 10,
   treeheight_col = 10,
-  # kmeans_k = 4,
-  # display_numbers = TRUE,
-  #filename = "plots/CIVSA2_HeatmapDEGs_Final_Unclustered_Condensed.pdf",
   legend_labels = c("FoodTrained", "Maintenance", "Craving"),
 )
-# labels_row = matrownames_data_mod$symbol)
+
+```
+
+
+
+## Volcano Plots
+
+### Visualize Results: Volcano Plots (Non-Interactive)
+
+Volcano plots are generated by gathering the FDR corrected p-values from each analysis. The adjusted p-values undergo a -log10 transformation to generate these FDR corrected values. Any rows containing "NA" are ommitted from analysis. Data points are colored based on increasing or decreasing value and plotted using ggplot2. Adjusted p-value cutoff is 1.3 following log transformation.(-log10 0.05 = 1.3)
+
+```{r Volcano Plots, echo=FALSE, fig.height=10, fig.width=10, paged.print=TRUE}
+
+# Gather Log-fold change and FDR-corrected pvalues from DESeq2 results
+# Change pvalues to -log10 (1.3 = 0.05)
+data <- data.frame(gene = (res$symbol),
+                   pval = -log10(res$padj), 
+                   lfc = res$log2FoldChange,
+                   lfcSE = res$lfcSE)
+
+data2 <- data.frame(gene = (res2$symbol),
+                   pval = -log10(res2$padj), 
+                   lfc = res2$log2FoldChange,
+                   lfcSE = res2$lfcSE)
+
+data3 <- data.frame(gene = (res3$symbol),
+                    pval = -log10(res3$padj), 
+                    lfc = res3$log2FoldChange,
+                    lfcSE = res3$lfcSE)
+
+
+data <- subset(data, lfcSE <= 3)
+data2 <- subset(data2, lfcSE <= 3)
+data3 <- subset(data3, lfcSE <= 3)
+
+# Remove any rows that have NA as an entry
+data <- na.omit(data)
+
+data2 <- na.omit(data2)
+
+data3 <- na.omit(data3)
+
+# Color the points which are up or down
+## If fold-change > 0 and pvalue > 1.3 (Increased significant)
+## If fold-change < 0 and pvalue > 1.3 (Decreased significant)
+
+ressig1
+res2
+res3
+library(dplyr)
+data <- dplyr::mutate(data, color = case_when(data$lfc > 0 & data$pval > 1.3 ~ "Increased in Craving vs FoodTrained",
+                                       data$lfc < 0 & data$pval > 1.3 ~ "Decreased in Craving vs FoodTrained",
+                                       data$pval < 1.3 ~ "Nonsignificant"))
+
+data2 <- dplyr::mutate(data2, color = case_when(data2$lfc > 0 & data2$pval > 1.3 ~ "Increased in Maintenance vs FoodTrained",
+                                       data2$lfc < 0 & data2$pval > 1.3 ~ "Decreased in Maintenance vs FoodTrained",
+                                       data2$pval < 1.3 ~ "Nonsignificant"))
+
+data3 <- dplyr::mutate(data3, color = case_when(data3$lfc > 0 & data3$pval > 1.3 ~ "Increased in Craving vs Maintenance",
+                                       data3$lfc < 0 & data3$pval > 1.3 ~ "Decreased in Craving vs Maintenance",
+                                       data3$pval < 1.3 ~ "Nonsignificant"))
+
+
+#data$genelabels <- ifelse(data$gene == "Col4a3"
+#                                  | data$gene == "Dnajb3"
+#                                  | data$gene == "Clca4a"
+#                                  | data$gene == "Kcnn4"
+#                                  | data$gene == "Cd48"
+#                                  | data$gene == "Slc6a2"
+#                                  | data$gene == "Isl1"
+#                                  | data$gene == "Dbh"
+#                                  | data$gene == "Calca"
+#                                  | data$gene == "Fgf18", T, F)
+
+#data2$genelabels <- ifelse(data2$gene == "Col4a3"
+#                                 | data2$gene == "Dnajb3"
+#                                  | data2$gene == "Chrnb3"
+#                                  | data2$gene == "Calca"
+#                                  | data2$gene == "Calcb"
+#                                  | data2$gene == "Tmem63a"
+#                                  | data2$gene == "Serpinb1a"
+#                                  | data2$gene == "Wnt7a"
+#                                  | data2$gene == "Myrf"
+#                                  | data2$gene == "Sox10"
+#                                  | data2$gene == "Oprm1"
+#                                  | data2$gene == "Oprk1", T, F)
+
+#data3$genelabels <- ifelse(data3$gene == "Dnajb3"
+#                                  | data3$gene == "Col4a3"
+#                                  | data3$gene == "Slc25a43"
+#                                  | data3$gene == "Crhbp"
+#                                  | data3$gene == "Calca"
+#                                  | data3$gene == "Dusp10"
+#                                  | data3$gene == "Nps"
+#                                  | data3$gene == "Ccnd1"
+#                                  | data3$gene == "Wnt7a"
+#                                  | data3$gene == "Kcnk15", T, F)
+
+
+
+# Make a basic ggplot2 object with x-y values
+vol <- ggplot(data, aes(x = lfc, y = pval, color = color))
+
+vol2 <- ggplot(data2, aes(x = lfc, y = pval, color = color))
+
+vol3 <- ggplot(data3, aes(x = lfc, y = pval, color = color))
+
+# Add ggplot2 layers
+
+y.axis.text <- element_text(face = "bold", color = "black", size = 7)
+x.axis.text <- element_text( face = "bold", color = "black", size = 7)
+plot.title.text <- element_text( face = "bold", color = "black", size = 9, hjust = 0.5)
+legend.text <- element_text(face = "bold", color = "black", size = 5)
+legend.title.text <- element_text(face = "bold", color = "black", size = 6)
+axis.title <- element_text(face = "bold", color = "black", size = 6)
+
+
+library(ggrepel)
+
+vol_final <- vol +   
+  ggtitle(label = "Craving vs FoodTrained") +
+  geom_point(size = 1, alpha = 0.8, na.rm = T) +
+  scale_color_manual(name = "Directionality",
+                     values = c("Increased in Craving vs FoodTrained" = "#008B00", "Decreased in Craving vs FoodTrained" = "#CD4F39", "Nonsignificant" = "darkgray")) +
+  theme_bw(base_size = 14) + # change overall theme+
+  theme(legend.position = "right",
+        axis.text.y = y.axis.text, 
+        axis.text.x = x.axis.text,
+        axis.title = axis.title,
+        plot.title = plot.title.text,
+        legend.text = legend.text,
+        legend.title = legend.title.text,
+        legend.key.size = unit(0.5, 'cm'), #change legend key size
+        legend.key.height = unit(0.5, 'cm'), #change legend key height
+        legend.key.width = unit(0.5, 'cm'))+  #change legend key width
+  xlab(expression(log[2]("Fold Change"))) + # Change X-Axis label
+  ylab(expression(-log[10]("adjusted p-value"))) + # Change Y-Axis label
+  geom_hline(yintercept = 1.3, colour = "darkgrey") + # Add p-adj value cutoff line
+  scale_y_continuous(trans = "log1p")
+#  geom_text_repel(aes(lfc,pval),
+#                      label = ifelse(data$genelabels == TRUE, 
+#                                     as.character(data$gene),""), 
+#                      box.padding = unit(1, "lines"),hjust= 0.30, max.overlaps = Inf)  # Scale y-axis due to large p-values+
+
+
+vol2_final <- vol2 +   
+  ggtitle(label = "Maintenance vs FoodTrained") +
+  geom_point(size = 1, alpha = 0.8, na.rm = T) +
+  scale_color_manual(name = "Directionality",
+                    values = c("Increased in Maintenance vs FoodTrained" = "#008B00", "Decreased in Maintenance vs FoodTrained" = "#CD4F39", "Nonsignificant" = "darkgray")) +
+  theme_bw(base_size = 14) + # change overall theme
+  theme(legend.position = "right",
+        axis.text.y = y.axis.text, 
+        axis.text.x = x.axis.text,
+        axis.title = axis.title,
+        plot.title = plot.title.text,
+        legend.text = legend.text,
+        legend.title = legend.title.text,
+        legend.key.size = unit(0.5, 'cm'), #change legend key size
+        legend.key.height = unit(0.5, 'cm'), #change legend key height
+        legend.key.width = unit(0.5, 'cm'))+ #change legend key width
+  xlab(expression(log[2]("Fold Change"))) + # Change X-Axis label
+  ylab(expression(-log[10]("adjusted p-value"))) + # Change Y-Axis label
+  geom_hline(yintercept = 1.3, colour = "darkgrey") + # Add p-adj value cutoff line
+  scale_y_continuous(trans = "log1p")
+#  geom_text_repel(aes(lfc,pval),
+#                      label = ifelse(data2$genelabels == TRUE, 
+#                                     as.character(data2$gene),""), 
+#                      box.padding = unit(0.5, "lines"),hjust= 0.30, max.overlaps = Inf, color = "black")  # Scale y-axis due to large p-values+ # Scale y-axis due to large p-values
+
+vol3_final <- vol3 +   
+  ggtitle(label = "Craving vs Maintenance") +
+  geom_point(size = 1, alpha = 0.8, na.rm = T) +
+  scale_color_manual(name = "Directionality",
+                     values = c("Increased in Craving vs Maintenance" = "#008B00", "Decreased in Craving vs Maintenance" = "#CD4F39", "Nonsignificant" = "darkgray")) +
+  theme_bw(base_size = 14) + # change overall theme
+  theme(legend.position = "right",
+        axis.text.y = y.axis.text, 
+        axis.text.x = x.axis.text,
+        axis.title = axis.title,
+        plot.title = plot.title.text,
+        legend.text = legend.text,
+        legend.title = legend.title.text,
+        legend.key.size = unit(0.5, 'cm'), #change legend key size
+        legend.key.height = unit(0.5, 'cm'), #change legend key height
+        legend.key.width = unit(0.5, 'cm'))+ #change legend key width
+  xlab(expression(log[2]("fold change"))) + # Change X-Axis label
+  ylab(expression(-log[10]("adjusted p-value"))) + # Change Y-Axis label
+  geom_hline(yintercept = 1.3, colour = "darkgrey") + # Add p-adj value cutoff line
+  scale_y_continuous(trans = "log1p")
+#  geom_text_repel(aes(lfc,pval),
+#                      abel = ifelse(data3$genelabels == TRUE, 
+#                                     as.character(data3$gene),""), 
+#                      box.padding = unit(15, "lines"),hjust= 0.30, max.overlaps = Inf)  # Scale y-axis due to large p-values+
+
+#pdf(file = "plots/Volcano_Updated_CIVSA2_labstest.pdf", width = 10, height = 10);
+
+#bottom_row<-ggarrange(vol2_final,vol3_final,ncol=2,nrow=1)
+
+ggarrange(vol_final, vol2_final,vol3_final, labels = c('A', 'B', 'C'), ncol = 2, nrow = 2)
+
+#ggarrange(vol2_final)
+
+#dev.off()
+```
+
+### Visualize Results: Volcano Plots (Interactive)
+
+Interactive Volcano plots are generated by Using the same method as above, but are plotted so that genes may be identified and log2FC can be seen from each gene. Plots can be used to customize which genes appear based on what you would like to see.
+
+```{r Interactive Volcano Plots, echo=FALSE, message=FALSE, warning=FALSE}
+
+## Interactive Volcano Plot
+
+
+library(gridExtra)
+library(plotly)
+
+# keep only the fields needed for the plot
+# FDR = false discovery rate = adjusted p value = significance 
+intvol <- data.frame(gene = (res$symbol),
+                   pval = (res$padj), 
+                   lfc = res$log2FoldChange)
+
+intvol2 <- data.frame(gene = (res2$symbol),
+                   pval = (res2$padj), 
+                   lfc = res2$log2FoldChange)
+
+intvol3 <- data.frame(gene = (res3$symbol),
+                    pval = (res3$padj), 
+                    lfc = res3$log2FoldChange)
+
+
+
+# preview the dataset; data required for the plot
+#head(intvol)# add a grouping column; default value is "not significant"
+intvol["group"] <- "NotSignificant"
+intvol2["group"] <- "NotSignificant"
+intvol3["group"] <- "NotSignificant"
+
+# for our plot, we want to highlight 
+# FDR < 0.05 (significance level)
+# Fold Change > 1.5
+
+
+
+
+# change the grouping for the entries with significance but not a large enough Fold change
+intvol[which(intvol['pval'] < 0.05 & abs(intvol['lfc']) < 1.5 ),"group"] <- "Significant"
+intvol2[which(intvol2['pval'] < 0.05 & abs(intvol2['lfc']) < 1.5 ),"group"] <- "Significant"
+intvol3[which(intvol3['pval'] < 0.05 & abs(intvol3['lfc']) < 1.5 ),"group"] <- "Significant"
+
+
+# change the grouping for the entries a large enough Fold change but not a low enough p value
+intvol[which(intvol['pval'] > 0.05 & abs(intvol['lfc']) > 1.5 ),"group"] <- "FoldChange"
+intvol2[which(intvol2['pval'] > 0.05 & abs(intvol2['lfc']) > 1.5 ),"group"] <- "FoldChange"
+intvol3[which(intvol3['pval'] > 0.05 & abs(intvol3['lfc']) > 1.5 ),"group"] <- "FoldChange"
+
+
+# change the grouping for the entries with both significance and large enough fold change
+intvol[which(intvol['pval'] < 0.05 & abs(intvol['lfc']) > 1.5 ),"group"] <- "Significant&FoldChange"
+intvol2[which(intvol2['pval'] < 0.05 & abs(intvol2['lfc']) > 1.5 ),"group"] <- "Significant&FoldChange"
+intvol3[which(intvol3['pval'] < 0.05 & abs(intvol3['lfc']) > 1.5 ),"group"] <- "Significant&FoldChange"
+
+
+# Find and label the top peaks..
+top_peaks <- intvol[with(intvol, order(lfc, pval)),][1:5,]
+top_peaks <- rbind(top_peaks, intvol[with(intvol, order(-lfc, pval)),][1:5,])
+
+top_peaks2 <- intvol2[with(intvol2, order(lfc, pval)),][1:5,]
+top_peaks2 <- rbind(top_peaks2, intvol2[with(intvol2, order(-lfc, pval)),][1:5,])
+
+top_peaks3 <- intvol3[with(intvol3, order(lfc, pval)),][1:5,]
+top_peaks3 <- rbind(top_peaks3, intvol3[with(intvol3, order(-lfc, pval)),][1:5,])
+
+# Add gene labels for all of the top genes we found
+# here we are creating an empty list, and filling it with entries for each row in the dataframe
+# each list entry is another list with named items that will be used by Plot.ly
+
+ab <- list()
+for (i in seq_len(nrow(top_peaks))) {
+  m <- top_peaks[i, ]
+  ab[[i]] <- list(
+    x = m[["lfc"]],
+    y = -log10(m[["pval"]]),
+    text = m[["gene"]],
+    xref = "x",
+    yref = "y",
+    showarrow = TRUE,
+    arrowhead = 0.5,
+    ax = 40,
+    ay = -70
+  )
+}
+
+
+ac <- list()
+for (i in seq_len(nrow(top_peaks2))) {
+  m <- top_peaks2[i, ]
+  ac[[i]] <- list(
+    x = m[["lfc"]],
+    y = -log10(m[["pval"]]),
+    text = m[["gene"]],
+    xref = "x",
+    yref = "y",
+    showarrow = TRUE,
+    arrowhead = 0.5,
+    ax = 40,
+    ay = -70
+  )
+}
+
+#
+ad <- list()
+for (i in seq_len(nrow(top_peaks3))) {
+  m <- top_peaks3[i, ]
+  ad[[i]] <- list(
+    x = m[["lfc"]],
+    y = -log10(m[["pval"]]),
+    text = m[["gene"]],
+    xref = "x",
+    yref = "y",
+    showarrow = TRUE,
+    arrowhead = 0.5,
+    ax = 40,
+    ay = -70
+  )
+}
+
+
+
+#
+# make the Plot.ly plot
+plota <- plot_ly(data = intvol, x = intvol$lfc, y = -log10(intvol$pval), text = intvol$gene, mode = "markers", color = intvol$group) %>% 
+  plotly::layout(title ="Volcano Plot (Craving vs FoodTrained)") %>%
+  plotly::layout(annotations = ab)
+plota
+
+plotb <- plot_ly(data = intvol2, x = intvol2$lfc, y = -log10(intvol2$pval), text = intvol2$gene, mode = "markers", color = intvol2$group) %>% 
+  plotly::layout(title ="Volcano Plot (Maintenance vs FoodTrained)") %>%
+  plotly::layout(annotations = ac)
+plotb
+
+plotc <- plot_ly(data = intvol3, x = intvol3$lfc, y = -log10(intvol3$pval), text = intvol3$gene, mode = "markers", color = intvol3$group) %>% 
+  plotly::layout(title ="Volcano Plot (Craving vs Maintenance)") %>%
+  plotly::layout(annotations = ad)
+plotc
+
+
 ```
