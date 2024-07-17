@@ -529,7 +529,7 @@ pheatmap::pheatmap(
   cutree_cols = 2,
   treeheight_row = 10,
   treeheight_col = 10,
-  filename = "plots/DAvsnDA_HeatmapDEGs.pdf",
+  #filename = "plots/DAvsnDA_HeatmapDEGs.pdf",
   legend_labels = c("Da", "nDA")
 )
 ```
