@@ -317,6 +317,36 @@ kable((head(results_sig3, 20)), caption = "Significant Craving vs Maintenance", 
 
 
 ```{r Write Significant Results to CSV, eval=FALSE, include=FALSE}
+
+results_significant <-as.data.frame(results_sig)
+results2_significant <-as.data.frame(results_sig2)
+results3_significant <-as.data.frame(results_sig3)
+
+results_significant <- results_significant[order(results_significant$log2FoldChange,
+decreasing=TRUE),]
+results2_significant <- results2_significant[order(results2_significant$log2FoldChange,
+decreasing=TRUE),]
+results3_significant <- results3_significant[order(results3_significant$log2FoldChange,
+decreasing=TRUE),]
+
+
+results_significant_top50 <-head(results_significant,50)
+results2_significant_top50 <-head(results2_significant,50)
+results3_significant_top50 <-head(results3_significant,50)
+
+results_significant_bot50 <-tail(results_significant,50)
+results2_significant_bot50 <-tail(results2_significant,50)
+results3_significant_bot50 <-tail(results3_significant,50)
+
+topandbottom50_results_significant <- rbind(results_significant_top50,results_significant_bot50)
+topandbottom50_results2_significant <- rbind(results2_significant_top50,results2_significant_bot50)
+topandbottom50_results3_significant <- rbind(results3_significant_top50,results3_significant_bot50)
+
+write_csv((as.data.frame(topandbottom50_results_significant)), "output/Top50_Bot50_Sig_Res_Craving_vs_FoodTrained.csv")
+write_csv((as.data.frame(topandbottom50_results2_significant)), "output/Top50_Bot50_Sig_Res_Maintenance_vs_FoodTrained.csv")
+write_csv((as.data.frame(topandbottom50_results3_significant)), "output/Top50_Bot50_Sig_Res_Craving_vs_Maintenance.csv")
+
+
 write_csv((as.data.frame(results_sig)), "output/Sig_Res_Craving_vs_FoodTrained.csv")
 write_csv((as.data.frame(results_sig2)), "output/Sig_Res_Maintenance_vs_FoodTrained.csv")
 write_csv((as.data.frame(results_sig3)), "output/Sig_Res_Craving_vs_Maintenance.csv")
