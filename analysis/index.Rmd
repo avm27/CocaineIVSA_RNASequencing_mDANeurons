@@ -471,7 +471,7 @@ d2 <- plotCounts(dds,
 
 a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
   geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
-  scale_color_manual(values=c("#90BFF9", "#EECCF9", "#FFC080")) +
+  scale_color_manual(values=c("#0000FF", "#FF8000", "#AD07E3")) +
   theme_bw() +
   xlab("Condition")+
   ylab("Normalized Counts")+
@@ -496,7 +496,7 @@ d2 <- plotCounts(dds,
 
 a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
   geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
-  scale_color_manual(values=c("#90BFF9", "#EECCF9", "#FFC080")) +
+  scale_color_manual(values=c("#0000FF", "#FF8000", "#AD07E3")) +
   theme_bw() +
   xlab("Condition")+
   ylab("Normalized Counts")+
@@ -521,7 +521,7 @@ d2 <- plotCounts(dds,
 
 a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
   geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
-  scale_color_manual(values=c("#90BFF9", "#EECCF9", "#FFC080")) +
+  scale_color_manual(values=c("#0000FF", "#FF8000", "#AD07E3")) +
   theme_bw() +
   xlab("Condition")+
   ylab("Normalized Counts")+
@@ -545,7 +545,7 @@ d2 <- plotCounts(dds,
 
 a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
   geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
-  scale_color_manual(values=c("#90BFF9", "#EECCF9", "#FFC080")) +
+  scale_color_manual(values=c("#0000FF", "#FF8000", "#AD07E3")) +
   theme_bw() +
   xlab("Condition")+
   ylab("Normalized Counts")+
@@ -569,7 +569,7 @@ d2 <- plotCounts(dds,
 
 a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
   geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
-  scale_color_manual(values=c("#90BFF9", "#EECCF9", "#FFC080")) +
+  scale_color_manual(values=c("#0000FF", "#FF8000", "#AD07E3")) +
   theme_bw() +
   xlab("Condition")+
   ylab("Normalized Counts")+
@@ -594,7 +594,7 @@ d2 <- plotCounts(dds,
 
 a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
   geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
-  scale_color_manual(values=c("#90BFF9", "#EECCF9", "#FFC080")) +
+  scale_color_manual(values=c("#0000FF", "#FF8000", "#AD07E3")) +
   theme_bw() +
   xlab("Condition")+
   ylab("Normalized Counts")+
@@ -623,6 +623,7 @@ nudge <- position_nudge(y =2)
 
 pcaData2 <- plotPCA(ddsMat_rlog, intgroup = "condition", returnData = TRUE)
 pcaData2$condition <- factor(pcaData2$condition, levels = c("FoodTrained", "Maintenance", "Craving"))
+pcaData2$color <- factor(pcaData2$condition, levels = c("#0000FF", "#AD07E3", "#FF8000"))
 percentVar2 <- round(100 * attr(pcaData2, "percentVar"))
 ggplot(pcaData2, aes(PC1, PC2, color=condition, label = colnames(dds))) +
   theme_bw() + 
@@ -804,8 +805,8 @@ annot_col <- samples %>%
   as.data.frame()
 
 ann_colors = list(
-  condition = as.factor(c(FoodTrained = "slateblue2", Maintenance = "limegreen", Craving = "violetred2")),
-  Group = as.factor(c(FoodTrained = "slateblue2", Maintenance = "limegreen", Craving = "violetred2")))
+  condition = as.factor(c(FoodTrained = "#0000FF", Maintenance = "#AD07E3", Craving = "#FF8000")),
+  Group = as.factor(c(FoodTrained = "#0000FF", Maintenance = "#AD07E3", Craving = "#FF8000")))
 
 ```
 
@@ -816,6 +817,7 @@ pheatmap::pheatmap(
   mat = data_mod,
   color = colorRampPalette(rev(brewer.pal(11, "RdYlBu")))(155),
   scale = "row",
+  annotation_colors = ann_colors,
   annotation_col = annot_col,
   fontsize = 10, 
   show_colnames = T,
@@ -845,6 +847,7 @@ pheatmap::pheatmap(
   color = colorRampPalette(rev(brewer.pal(11, "RdYlBu")))(155),
   scale = "row",
   annotation_col = annot_col,
+  annotation_colors = ann_colors,
   fontsize = 10,
   show_colnames = T,
   cluster_rows = T,
