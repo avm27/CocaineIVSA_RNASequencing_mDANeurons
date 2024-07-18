@@ -297,7 +297,7 @@ d2 <- plotCounts(dds,
 
 a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
   geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
-  scale_color_manual(values=c("#00DAE0", "#FF9289")) +
+  scale_color_manual(values=c("#FF9289", "#00DAE0")) +
   theme_bw() +
   xlab("Condition")+
   ylab("Normalized Counts")+
@@ -322,7 +322,7 @@ d2 <- plotCounts(dds,
 
 a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
   geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
-  scale_color_manual(values=c("#00DAE0", "#FF9289")) +
+  scale_color_manual(values=c("#FF9289", "#00DAE0")) +
   theme_bw() +
   xlab("Condition")+
   ylab("Normalized Counts")+
@@ -347,7 +347,7 @@ d2 <- plotCounts(dds,
 
 a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
   geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
-  scale_color_manual(values=c("#00DAE0", "#FF9289")) +
+  scale_color_manual(values=c("#FF9289", "#00DAE0")) +
   theme_bw() +
   xlab("Condition")+
   ylab("Normalized Counts")+
@@ -371,7 +371,7 @@ d2 <- plotCounts(dds,
 
 a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
   geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
-  scale_color_manual(values=c("#00DAE0", "#FF9289")) +
+  scale_color_manual(values=c("#FF9289", "#00DAE0")) +
   theme_bw() +
   xlab("Condition")+
   ylab("Normalized Counts")+
@@ -395,7 +395,7 @@ d2 <- plotCounts(dds,
 
 a <- ggplot(d2, aes(x = factor(condition, level = level_order), y = count, color = condition)) +
   geom_point(position = position_jitter(w = 0.1, h = 0), size = 5) +
-  scale_color_manual(values=c("#00DAE0", "#FF9289")) +
+  scale_color_manual(values=c("#FF9289", "#00DAE0")) +
   theme_bw() +
   xlab("Condition")+
   ylab("Normalized Counts")+
@@ -435,7 +435,7 @@ ggplot(pcaData2, aes(PC1, PC2, color=condition, label = colnames(dds))) +
   xlab(paste0("PC1: ",percentVar2[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar2[2],"% variance")) + 
   ggrepel::geom_label_repel(box.padding = 1, max.overlaps = Inf) +
-  scale_fill_manual(values=c("#00DAE0", "#FF9289")) +
+  scale_fill_manual(values=c("#FF9289", "#00DAE0")) +
   coord_fixed() +
   ggtitle(label = "Principal Component Analysis (PCA)", 
           subtitle = "rlog transformed") 
