@@ -435,7 +435,7 @@ ggplot(pcaData2, aes(PC1, PC2, color=condition, label = colnames(dds))) +
   xlab(paste0("PC1: ",percentVar2[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar2[2],"% variance")) + 
   ggrepel::geom_label_repel(box.padding = 1, max.overlaps = Inf) +
-  scale_fill_manual(values=c("#FF9289", "#00DAE0")) +
+  scale_color_manual(values=c("#00DAE0","#FF9289")) +
   coord_fixed() +
   ggtitle(label = "Principal Component Analysis (PCA)", 
           subtitle = "rlog transformed") 
