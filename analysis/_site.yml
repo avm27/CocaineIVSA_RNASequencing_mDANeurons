@@ -3,7 +3,7 @@ output_dir: ../docs
 navbar:
   title: Cocaine IVSA mDA Neurons RNASequencing Analysis
   left:
-  - text: Dopamine vs Non-Dopmaine Analysis
+  - text: Dopamine vs Non-Dopamine Analysis
     href: DAvsnDA.html
   - text: About Our Lab
     href: about.html
