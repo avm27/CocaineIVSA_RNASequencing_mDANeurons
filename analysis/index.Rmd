@@ -106,7 +106,7 @@ Dopamine (DA) signaling plays an essential role in reward valence attribution an
 
 Building DESeq2 input files from gene count matrices output by StringTie following removal of samples that are outliers.
 
-```{r DESeq2 Build -- Final, message=FALSE, warning=FALSE, include=FALSE}
+```{r DESeq2 Build, message=FALSE, warning=FALSE, include=FALSE}
 rm(list = ls(all.names = TRUE))
 gc()
 conflicts_prefer(base::setdiff)
@@ -658,7 +658,7 @@ a
 
 ## Principal Components Analysis (PCA)
 
-For visualization I am converting all analyses to logarithmic. Following this I have completed a PCA for each analyses based on all genes together.
+For visualization I am converting all analyses to logarithmic. Following this I have completed a PCA to analyze sample dispersion across genes.
 
 ```{r Plot PCA, echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
 # Convert all samples to rlog for data visualization
